@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FFF9F3">
+  <meta name="description" content="SKZOO Collection：以柔和手帳風格整理八位 SKZOO 角色與週邊圖片的非官方粉絲典藏展示。">
+  <title>SKZOO Collection｜我的可愛典藏日記</title>
+  <style>
+    /* ────────────── 01. Design tokens & foundations ────────────── */
+    :root {
+      color-scheme: light;
+      --cream: #fff9f3;
+      --cream-deep: #fff1e9;
+      --pink-light: #f8dde5;
+      --pink: #f2c9d6;
+      --pink-strong: #dc849f;
+      --purple: #eae1f2;
+      --ink: #51454d;
+      --ink-soft: #786973;
+      --muted: #9e8d98;
+      --white: #fff;
+      --line: #eee0e3;
+      --shadow: 0 14px 38px rgba(113, 74, 87, .075);
+      --shadow-hover: 0 18px 38px rgba(113, 74, 87, .14);
+      --radius: 24px;
+      --content: 1200px;
+      --header-h: 75px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 18px); }
+    body {
+      margin: 0; min-width: 320px; color: var(--ink); background: var(--cream);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.65; -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .43;
+      background-image: radial-gradient(#f0d5df 0.65px, transparent 0.65px);
+      background-size: 22px 22px; z-index: -1;
+    }
+    body.modal-open { overflow: hidden; }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .55; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    :focus-visible { outline: 3px solid #b76588; outline-offset: 3px; }
+    .container { width: min(calc(100% - 44px), var(--content)); margin-inline: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .no-scroll { overflow: hidden; }
+
+    /* ────────────── 02. Header / buttons ────────────── */
+    .site-header {
+      height: var(--header-h); position: sticky; top: 0; z-index: 30;
+      background: rgba(255, 249, 243, .91); border-bottom: 1px solid rgba(224, 196, 204, .65);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: 15px; height: 100%; }
+    .brand { display: inline-flex; gap: 9px; align-items: center; font-weight: 900; letter-spacing: -.035em; font-size: 20px; white-space: nowrap; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 14px; background: var(--pink-light); color: #ae607b; font-size: 24px; transform: rotate(-8deg); }
+    .brand span:last-child { display: inline-block; transform: translateY(1px); }
+    .brand em { color: var(--pink-strong); font-style: normal; }
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-link { padding: 10px 12px; font-weight: 700; font-size: 13px; border-radius: 100px; }
+    .nav-link:hover { background: var(--pink-light); }
+    .pill-btn {
+      border: 1px solid #e7b8c8; background: var(--white); border-radius: 999px; padding: 10px 17px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      color: #925469; font-size: 13px; font-weight: 800; transition: transform .2s, background .2s, box-shadow .2s;
+    }
+    .pill-btn:hover { background: #fff0f5; transform: translateY(-2px); box-shadow: 0 7px 14px rgba(154, 90, 113, .10); }
+    .pill-btn.is-active, .pill-btn.primary { background: #d981a0; color: #fff; border-color: #d981a0; }
+    .count-badge { display: inline-grid; place-items: center; min-width: 23px; height: 23px; padding: 0 5px; border-radius: 100px; background: #f8e3eb; color: #93536a; font-size: 11px; }
+    .pill-btn.is-active .count-badge { background: #fff; color: #af6481; }
+
+    /* ────────────── 03. Hero scrapbook ────────────── */
+    .hero { position: relative; overflow: hidden; padding: 64px 0 54px; }
+    .hero::before { content: ""; position: absolute; width: 510px; height: 510px; border-radius: 50%; right: -160px; top: -300px; background: #f8e4ec; filter: blur(9px); z-index: -1; }
+    .hero-layout { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 50px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #b47790; font-weight: 900; letter-spacing: .14em; font-size: 11px; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 22px; height: 2px; background: #d998b0; border-radius: 2px; }
+    .hero h1 { font-size: clamp(42px, 5.7vw, 78px); line-height: 1.12; letter-spacing: -.058em; margin: 20px 0 15px; font-weight: 950; }
+    .hero h1 span { color: #d783a0; }
+    .hero h1 .tiny-star { font-size: .52em; vertical-align: top; margin-left: 7px; color: #dfac6c; }
+    .hero-copy { max-width: 510px; color: var(--ink-soft); font-size: 16px; line-height: 1.95; margin: 0 0 25px; }
+    .hero-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+    .hero-cta .pill-btn { font-size: 14px; padding: 13px 22px; }
+    .hero-annotation { margin: 28px 0 0; color: #ab8c9a; font-size: 12px; letter-spacing: .08em; }
+    .hero-board { min-height: 422px; position: relative; isolation: isolate; }
+    .board-paper { position: absolute; inset: 25px 16px 15px 14px; border: 2px solid rgba(234, 206, 212, .9); background: #fff7ef; border-radius: 37px; transform: rotate(-4deg); box-shadow: 16px 18px 0 #fbe4e9; }
+    .board-paper::after { content: ""; position: absolute; inset: 20px; border: 2px dashed #f2d3dc; border-radius: 27px; }
+    .polaroid {
+      position: absolute; width: 175px; padding: 11px 11px 24px; background: #fff; border-radius: 5px;
+      box-shadow: 0 12px 22px rgba(89, 61, 72, .15); z-index: 1; text-align: center;
+    }
+    .polaroid::before { content: ""; position: absolute; width: 61px; height: 18px; top: -9px; left: 32%; background: rgba(242, 204, 214, .8); transform: rotate(-8deg); }
+    .polaroid:nth-of-type(2) { top: 45px; left: 28px; transform: rotate(-12deg); }
+    .polaroid:nth-of-type(3) { top: 78px; right: 15px; transform: rotate(10deg); }
+    .polaroid:nth-of-type(4) { bottom: 10px; left: 34%; transform: rotate(4deg); }
+    .polaroid-visual { aspect-ratio: 1 / 1; overflow: hidden; background: #fff2f6; border-radius: 4px; display: grid; place-items: center; }
+    .polaroid-visual img { width: 100%; height: 100%; object-fit: contain; }
+    .polaroid-visual.is-missing img { display: none; }
+    .polaroid-visual.is-missing::after { content: "♡"; font-size: 68px; color: #e8b4c5; }
+    .polaroid p { margin: 7px 0 -10px; font-size: 12px; font-weight: 800; color: #ac7f91; letter-spacing: .035em; }
+    .board-sticker { position: absolute; font-size: 40px; z-index: 2; filter: drop-shadow(0 4px 0 rgba(255,255,255,.8)); }
+    .sticker-heart { right: 38px; bottom: 23px; color: #e8a2b6; transform: rotate(-13deg); }
+    .sticker-star { left: 5px; bottom: 60px; color: #edcc86; transform: rotate(10deg); }
+    .board-caption { position: absolute; right: 24px; top: 20px; z-index: 2; transform: rotate(10deg); font-size: 12px; background: #f9e7b8; padding: 6px 12px; border-radius: 6px; color: #966d52; font-weight: 800; }
+
+    /* ────────────── 04. Collection intro and filtering ────────────── */
+    .collection-shell { position: relative; padding: 36px 0 100px; }
+    .section-heading { text-align: center; margin-bottom: 30px; }
+    .section-kicker { color: #b67e92; font-size: 11px; letter-spacing: .22em; font-weight: 900; }
+    .section-heading h2 { margin: 7px 0; font-size: clamp(28px, 3.7vw, 43px); line-height: 1.25; letter-spacing: -.05em; }
+    .section-heading p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+    .filter-box { background: rgba(255, 255, 255, .84); border: 1px solid var(--line); box-shadow: var(--shadow); border-radius: 25px; padding: 19px 21px 20px; margin-bottom: 38px; }
+    .filter-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; }
+    .filter-label { font-size: 13px; font-weight: 900; letter-spacing: .025em; }
+    .filter-hint { color: var(--muted); font-size: 12px; margin-left: 10px; font-weight: 400; }
+    .view-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .view-buttons .pill-btn { font-size: 12px; padding: 8px 13px; }
+    .filter-list { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-chip {
+      border: 1px solid #eadce0; background: #fff; color: #7c6570; border-radius: 100px;
+      padding: 8px 12px; font-size: 12px; font-weight: 750;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .filter-chip:hover { transform: translateY(-1px); border-color: #d6a3b5; }
+    .filter-chip[aria-pressed="true"] { border-color: #cd839e; background: #fae3eb; color: #86465e; }
+    .filter-chip .chip-dot { display: inline-block; vertical-align: middle; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; background: var(--chip-color, #e5b2c4); }
+    .results-status { color: var(--ink-soft); font-size: 12px; margin: 0 0 20px 3px; }
+
+    /* ────────────── 05. Character sections and product cards ────────────── */
+    .character-section {
+      --section-accent: #f2d2df;
+      background: rgba(255, 255, 255, .77); border: 1px solid #efe2e5; border-radius: 30px;
+      padding: clamp(20px, 3.2vw, 36px); box-shadow: var(--shadow); margin-bottom: 28px;
+      scroll-margin-top: calc(var(--header-h) + 20px); position: relative; overflow: hidden;
+    }
+    .character-section::before { content: ""; position: absolute; left: -38px; top: -45px; width: 160px; height: 160px; border-radius: 50%; background: var(--section-accent); opacity: .40; pointer-events: none; }
+    .character-head { position: relative; display: flex; align-items: flex-start; gap: 20px; margin-bottom: 20px; }
+    .character-index { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 19px; background: var(--section-accent); color: #835d6a; font-weight: 900; font-size: 21px; transform: rotate(-6deg); }
+    .character-copy { flex: 1; min-width: 0; }
+    .character-overline { display: inline-block; margin-bottom: 2px; font-size: 11px; color: #a08091; font-weight: 850; letter-spacing: .1em; }
+    .character-copy h3 { margin: 0 0 3px; font-size: clamp(23px, 3.3vw, 33px); line-height: 1.3; letter-spacing: -.045em; overflow-wrap: anywhere; }
+    .character-copy > p { margin: 4px 0 0; color: #786b75; font-size: 13px; }
+    .intro-details { margin-top: 10px; max-width: 660px; }
+    .intro-details summary { display: inline-block; list-style: none; cursor: pointer; color: #ac6482; font-weight: 850; font-size: 12px; border-bottom: 1px dashed #d29bb2; }
+    .intro-details summary::-webkit-details-marker { display: none; }
+    .intro-details summary::after { content: " ＋"; }
+    .intro-details[open] summary::after { content: " －"; }
+    .intro-details p { margin: 11px 0 0; padding: 12px 14px; border-radius: 14px; background: #fff7fa; color: #76656e; font-size: 12px; }
+    .product-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 15px; }
+    .product-card { position: relative; min-width: 0; overflow: hidden; border: 1px solid #f0e4e7; border-radius: 18px; background: #fff; transition: transform .2s, box-shadow .2s, border-color .2s; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #e9c4d1; }
+    .product-open { display: block; width: 100%; padding: 0; text-align: left; background: transparent; border: 0; }
+    .product-image-wrap { position: relative; width: 100%; aspect-ratio: 1 / 1.06; background: linear-gradient(135deg, #fff2f6 0%, #fff9f5 100%); display: grid; place-items: center; padding: 12px; overflow: hidden; }
+    .product-image-wrap img { height: 100%; width: 100%; object-fit: contain; transition: transform .28s; }
+    .product-card:hover .product-image-wrap img { transform: scale(1.035); }
+    .product-image-wrap.is-missing img { display: none; }
+    .image-fallback { display: none; position: absolute; inset: 0; padding: 16px; align-items: center; justify-content: center; flex-direction: column; gap: 7px; text-align: center; color: #b88a9c; }
+    .product-image-wrap.is-missing .image-fallback, .modal-image-wrap.is-missing .image-fallback { display: flex; }
+    .fallback-heart { font-size: 29px; line-height: 1; }
+    .image-fallback strong { font-size: 12px; }
+    .image-fallback small { font-size: 10px; color: #9d8791; word-break: break-all; }
+    .product-info { min-height: 79px; padding: 13px 13px 14px; }
+    .product-name { margin: 0 0 5px; font-size: 12px; line-height: 1.5; font-weight: 850; color: #5d4d58; overflow-wrap: anywhere; }
+    .product-subtitle { color: #b08899; font-size: 10px; }
+    .favorite-btn {
+      position: absolute; top: 9px; right: 9px; display: grid; place-items: center; padding: 0;
+      width: 35px; height: 35px; border: 1px solid #f1dfe5; border-radius: 50%; background: rgba(255,255,255,.95);
+      color: #bb9ba8; box-shadow: 0 3px 10px rgba(80,46,61,.08); z-index: 1;
+    }
+    .favorite-btn:hover { color: #cb648a; border-color: #e5afc1; }
+    .favorite-btn[aria-pressed="true"] { color: #d76c91; background: #fff2f6; border-color: #f0c2d1; }
+    .favorite-btn svg { width: 19px; height: 19px; fill: transparent; stroke: currentColor; stroke-width: 1.9; transition: fill .2s; }
+    .favorite-btn[aria-pressed="true"] svg { fill: currentColor; }
+    .empty-state { border: 2px dashed #e9cbd7; border-radius: 24px; background: #fffbfc; padding: 55px 25px; text-align: center; }
+    .empty-state .empty-icon { margin: 0 auto 4px; font-size: 47px; color: #e7a9bf; }
+    .empty-state h3 { margin: 0 0 7px; font-size: 20px; }
+    .empty-state p { color: var(--ink-soft); font-size: 13px; margin: 0 auto 19px; max-width: 370px; }
+
+    /* ────────────── 06. Modal ────────────── */
+    .product-dialog { width: min(880px, calc(100% - 28px)); max-height: min(90dvh, 900px); border: 1px solid #ecd8df; border-radius: 28px; padding: 0; color: var(--ink); background: #fffdfb; box-shadow: 0 25px 90px rgba(67, 40, 53, .27); overflow: auto; }
+    .product-dialog::backdrop { background: rgba(50, 31, 44, .56); backdrop-filter: blur(4px); }
+    .dialog-layout { display: grid; grid-template-columns: 1.1fr .9fr; min-height: 440px; }
+    .modal-image-wrap { position: relative; display: grid; place-items: center; min-height: 390px; background: linear-gradient(150deg, #ffedf4, #fff9ee); padding: 30px; overflow: hidden; }
+    .modal-image-wrap img { width: 100%; max-height: 62dvh; height: 100%; object-fit: contain; }
+    .modal-image-wrap.is-missing img { display: none; }
+    .modal-image-wrap .image-fallback { padding: 24px; }
+    .modal-copy { display: flex; flex-direction: column; align-items: flex-start; padding: 55px 31px 28px; }
+    .modal-overline { display: inline-flex; gap: 5px; align-items: center; color: #af7790; font-size: 11px; font-weight: 900; letter-spacing: .06em; }
+    .modal-copy h2 { margin: 14px 0 11px; font-size: clamp(22px, 3vw, 32px); line-height: 1.35; letter-spacing: -.03em; overflow-wrap: anywhere; }
+    .pending-label { display: inline-flex; align-items: center; border-radius: 100px; background: #f9eaf0; padding: 4px 10px; color: #a3647f; font-size: 11px; font-weight: 800; }
+    .modal-note { font-size: 13px; color: var(--ink-soft); line-height: 1.8; margin: 23px 0 18px; }
+    .modal-extra { font-size: 12px; color: #796770; margin: 0 0 15px; }
+    .modal-extra p { margin: 0 0 7px; }
+    .modal-spacer { flex: 1; }
+    .modal-actions { width: 100%; display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .modal-actions .pill-btn { flex: 1; min-width: 140px; }
+    .dialog-close { position: absolute; top: 13px; right: 13px; width: 39px; height: 39px; display: grid; place-items: center; font-size: 21px; border-radius: 50%; border: 1px solid #f0dfe5; background: #fff; z-index: 2; box-shadow: 0 3px 10px rgba(0,0,0,.07); }
+    .dialog-close:hover { background: #fff0f5; }
+
+    /* ────────────── 07. Footer, back to top, toast ────────────── */
+    .site-footer { padding: 42px 0 50px; text-align: center; border-top: 1px solid #eadde1; background: #fff8f7; }
+    .footer-title { font-weight: 950; letter-spacing: -.02em; color: #aa6b83; font-size: 18px; margin: 0 0 7px; }
+    .site-footer p { color: #907d87; font-size: 12px; margin: 6px 0; }
+    .back-top { position: fixed; right: 22px; bottom: 22px; border: 1px solid #e8b6c7; border-radius: 100px; background: #fff; color: #9e5b76; font-size: 12px; font-weight: 900; box-shadow: 0 8px 28px rgba(88,48,66,.16); padding: 11px 15px; z-index: 25; opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, visibility .2s, transform .2s; }
+    .back-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 18px); background: #5c4854; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,.15); color: white; padding: 11px 20px; font-size: 12px; font-weight: 800; opacity: 0; visibility: hidden; pointer-events: none; z-index: 90; max-width: calc(100vw - 32px); text-align: center; transition: .22s ease; }
+    .toast.is-visible { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+
+    /* ────────────── 08. Responsive / reduced motion ────────────── */
+    @media (max-width: 1020px) {
+      .hero-layout { gap: 20px; }
+      .hero-board { transform: scale(.9); transform-origin: center; }
+      .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      :root { --header-h: 65px; }
+      .container { width: min(calc(100% - 30px), var(--content)); }
+      .hero { padding: 40px 0 25px; }
+      .hero-layout { grid-template-columns: 1fr; gap: 0; }
+      .hero-copy { font-size: 14px; }
+      .hero-board { width: min(500px, 100%); margin: 18px auto 5px; transform: none; min-height: 380px; }
+      .board-paper { inset: 22px 20px; }
+      .polaroid { width: 36%; }
+      .polaroid:nth-of-type(2) { top: 50px; left: 8%; }
+      .polaroid:nth-of-type(3) { top: 70px; right: 7%; }
+      .polaroid:nth-of-type(4) { left: 33%; bottom: 5px; }
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+      .character-index { width: 55px; height: 55px; font-size: 18px; }
+      .nav-link { display: none; }
+      .dialog-layout { grid-template-columns: 1fr; }
+      .modal-image-wrap { min-height: 280px; max-height: 44dvh; padding: 23px; }
+      .modal-image-wrap img { max-height: 39dvh; }
+      .modal-copy { padding: 23px 25px 27px; }
+      .modal-copy h2 { margin-top: 7px; }
+      .modal-note { margin: 14px 0; }
+    }
+    @media (max-width: 480px) {
+      .brand { font-size: 16px; }
+      .brand-mark { width: 32px; height: 32px; font-size: 20px; }
+      .header-actions { gap: 5px; }
+      .header-actions .pill-btn { padding: 8px 10px; font-size: 11px; }
+      .hero h1 { font-size: clamp(41px, 11vw, 57px); }
+      .hero-board { min-height: 320px; }
+      .board-caption { top: 15px; right: 13px; font-size: 10px; }
+      .board-sticker { font-size: 30px; }
+      .section-heading h2 { font-size: 29px; }
+      .section-heading p { font-size: 12px; }
+      .filter-box { padding: 16px 14px; }
+      .filter-hint { display: block; margin-left: 0; }
+      .filter-top { align-items: flex-start; }
+      .filter-chip { font-size: 11px; padding: 7px 10px; }
+      .character-section { padding: 21px 13px 18px; border-radius: 23px; }
+      .character-head { gap: 12px; }
+      .character-index { width: 46px; height: 46px; border-radius: 14px; font-size: 15px; }
+      .character-copy > p { font-size: 12px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+      .product-info { padding: 10px; min-height: 70px; }
+      .product-name { font-size: 11px; }
+      .favorite-btn { width: 32px; height: 32px; }
+      .back-top { right: 12px; bottom: 12px; padding: 10px 12px; }
+      .modal-copy { padding: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="top"></div>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#top" data-home aria-label="SKZOO Collection，返回首頁">
+        <span class="brand-mark" aria-hidden="true">✿</span>
+        <span>SKZOO <em>Collection</em></span>
+      </a>
+      <nav class="header-actions" aria-label="網站主導覽">
+        <a class="nav-link" href="#collection" id="browse-link">探索角色</a>
+        <button type="button" class="pill-btn" id="header-favorites" aria-pressed="false" aria-label="查看收藏清單">
+          <span aria-hidden="true">♡</span><span>收藏清單</span>
+          <span class="count-badge" id="header-count">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-layout">
+        <div>
+          <span class="eyebrow">MY LITTLE SKZOO ARCHIVE</span>
+          <h1 id="hero-title">收藏每一份<br><span>可愛的心動</span><span class="tiny-star" aria-hidden="true">✳</span></h1>
+          <p class="hero-copy">歡迎來到我的 SKZOO 小小典藏館！這裡把喜歡的角色與週邊，像手帳一樣一頁一頁珍藏起來。一起翻開充滿粉色心情的收藏日記吧 ♡</p>
+          <div class="hero-cta">
+            <a class="pill-btn primary" href="#collection">開始逛逛 <span aria-hidden="true">↗</span></a>
+            <button type="button" class="pill-btn" id="hero-favorites">♡ 看我的收藏</button>
+          </div>
+          <p class="hero-annotation">✧ 8 CHARACTERS &nbsp; · &nbsp; 40 LITTLE TREASURES ✧</p>
+        </div>
+        <div class="hero-board" id="hero-board" aria-label="三張角色週邊照片組成的手帳拼貼">
+          <div class="board-paper" aria-hidden="true"></div>
+          <!-- Polaroids are added by JavaScript from the central product data. -->
+          <span class="board-caption" aria-hidden="true">a little happy place ♡</span>
+          <span class="board-sticker sticker-heart" aria-hidden="true">♥</span>
+          <span class="board-sticker sticker-star" aria-hidden="true">✦</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="collection-shell" id="collection" aria-labelledby="collection-title">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-kicker">♡ THE COLLECTION ♡</div>
+          <h2 id="collection-title">角色與週邊小日記</h2>
+          <p id="collection-subtitle">每一個角色，都有屬於自己的可愛角落。</p>
+        </div>
+        <div class="filter-box">
+          <div class="filter-top">
+            <div>
+              <div class="filter-label">✿ 選擇想看的角色 <span class="filter-hint">點選可篩選並快速定位</span></div>
+            </div>
+            <div class="view-buttons" role="group" aria-label="展示模式">
+              <button type="button" class="pill-btn is-active" id="view-all" aria-pressed="true">全部週邊</button>
+              <button type="button" class="pill-btn" id="view-favorites" aria-pressed="false">♡ 我的收藏 <span id="toolbar-count">(0)</span></button>
+            </div>
+          </div>
+          <div class="filter-list" id="character-filters" role="group" aria-label="依角色篩選"></div>
+        </div>
+        <p class="results-status" id="results-status" role="status" aria-live="polite"></p>
+        <div id="gallery" aria-live="off"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer-title">✿ SKZOO Collection ♡</p>
+      <p>把小小喜歡，慢慢收藏成大大的快樂。</p>
+      <p>本站為非官方個人粉絲典藏展示，並非 SKZOO、Stray Kids 或 JYP Entertainment 官方網站或商店。</p>
+      <p>圖片與相關角色權利屬各原權利人；商品名稱及角色詳細資訊待查證與確認。</p>
+    </div>
+  </footer>
+
+  <button type="button" class="back-top" id="back-top" aria-label="返回首頁頂端">↑ 返回首頁</button>
+  <dialog class="product-dialog" id="product-dialog" aria-labelledby="modal-title" aria-describedby="modal-note">
+    <button type="button" class="dialog-close" id="dialog-close" aria-label="關閉商品預覽">×</button>
+    <div class="dialog-layout">
+      <div class="modal-image-wrap" id="modal-image-wrap">
+        <img id="modal-image" alt="">
+        <div class="image-fallback" aria-hidden="true"><span class="fallback-heart">♡</span><strong>目前無法顯示這張圖片</strong><small id="modal-missing-path"></small></div>
+      </div>
+      <div class="modal-copy">
+        <span class="modal-overline" id="modal-character"></span>
+        <h2 id="modal-title"></h2>
+        <span class="pending-label">商品正式名稱待確認</span>
+        <p class="modal-note" id="modal-note">此處展示你提供的圖片；若尚未核對資料，不會自行填入官方系列或商品規格。</p>
+        <div class="modal-extra" id="modal-extra" hidden></div>
+        <div class="modal-spacer"></div>
+        <div class="modal-actions">
+          <button class="pill-btn primary" type="button" id="modal-favorite" aria-pressed="false">♡ 加入收藏</button>
+          <button class="pill-btn" type="button" id="modal-done">繼續逛逛</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    "use strict";
+    /* ────────────── 01. Data: change names, intros, paths here ──────────────
+       The user's original images are NOT modified by this page.
+       Keep stable IDs unchanged to preserve localStorage favorites.
+       No official character description/product title is invented.
+    */
+    const CHARACTERS = [
+      { id: "bbokari", displayName: "BbokAri", prefix: "bbokari_keyring", accent: "#f8dce4" },
+      { id: "dwaekki", displayName: "Dwaekki", prefix: "dwaekki_keyring", accent: "#f6d8db" },
+      { id: "foxy-ny", displayName: "FoxI.Ny", prefix: "foxy-ny_keyring", accent: "#f8e4c9" },
+      { id: "han", displayName: "HAN QUOKKA", prefix: "han_keyring", accent: "#f6dfbb" },
+      { id: "jiniret", displayName: "Jiniret", prefix: "jiniret_keyring", accent: "#eadff6" },
+      { id: "leebit", displayName: "Leebit", prefix: "leebit_keyring", accent: "#dfe8f3" },
+      { id: "puppym", displayName: "PuppyM", prefix: "puppym_keyring", accent: "#e0eddf" },
+      { id: "wolfchan", displayName: "Wolf Chan", prefix: "wolfchan_keyring", accent: "#e8dfe9" }
+    ].map((character, index) => ({
+      ...character,
+      order: index + 1,
+      // Neutral site-copy, not an official character biography.
+      shortIntro: `這是 ${character.displayName} 的小小收藏角落，目前展示 5 張週邊圖片。`,
+      longIntro: "角色背景、個性及相關設定仍待官方來源查證，確認並經站長審核後，會在這裡補上更完整的介紹。",
+      introStatus: "pending",
+      sources: []
+    }));
+
+    // 8 characters × 5 files: images are generated from the exact supplied prefixes.
+    const PRODUCTS = CHARACTERS.flatMap(character =>
+      Array.from({ length: 5 }, (_, i) => {
+        const number = i + 1;
+        return {
+          id: `${character.id}-keyring-${number}`,
+          characterId: character.id,
+          order: number,
+          imagePath: `assets/${character.prefix}${number}.png`,
+          displayName: `${character.displayName} 週邊 ${String(number).padStart(2, "0")}`,
+          nameVerified: false,
+          type: null,
+          series: null,
+          description: null,
+          note: null
+        };
+      })
+    );
+    const PRODUCTS_BY_ID = new Map(PRODUCTS.map(item => [item.id, item]));
+    const STORAGE_KEY = "skzoo-collection-favorites-v1";
+
+    /* ────────────── 02. App state and safe localStorage ────────────── */
+    const state = {
+      filter: "all",
+      view: "all", // "all" | "favorites"
+      favorites: new Set(),
+      currentModalProductId: null,
+      modalReturnTarget: null,
+      refreshFavoritesAfterDialog: false
+    };
+    const $ = id => document.getElementById(id);
+    const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function scrollToArea(target) {
+      target.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    }
+    function loadFavorites() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return new Set();
+        const decoded = JSON.parse(raw);
+        if (!Array.isArray(decoded)) return new Set();
+        return new Set(decoded.filter(id => typeof id === "string" && PRODUCTS_BY_ID.has(id)));
+      } catch (_error) {
+        // Storage can be blocked in privacy settings or file:// environments.
+        return new Set();
+      }
+    }
+    function saveFavorites() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.favorites]));
+        return true;
+      } catch (_error) {
+        return false;
+      }
+    }
+    let toastTimer;
+    function showToast(message, duration = 2400) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("is-visible"), duration);
+    }
+    function iconHeart() {
+      // Inline SVG keeps the app completely independent of external icon libraries.
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("aria-hidden", "true");
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", "M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.4a5.5 5.5 0 0 0 0-7.8Z");
+      path.setAttribute("stroke-linecap", "round");
+      path.setAttribute("stroke-linejoin", "round");
+      svg.append(path);
+      return svg;
+    }
+    function makeImage(path, alt, className = "") {
+      const img = document.createElement("img");
+      if (className) img.className = className;
+      img.src = path;
+      img.alt = alt;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("error", () => {
+        const parent = img.parentElement;
+        if (parent) parent.classList.add("is-missing");
+      });
+      return img;
+    }
+    function makeFallback(path) {
+      const fallback = document.createElement("div");
+      fallback.className = "image-fallback";
+      fallback.setAttribute("aria-hidden", "true");
+      const heart = document.createElement("span");
+      heart.className = "fallback-heart";
+      heart.textContent = "♡";
+      const label = document.createElement("strong");
+      label.textContent = "圖片暫時無法顯示";
+      const name = document.createElement("small");
+      name.textContent = path;
+      fallback.append(heart, label, name);
+      return fallback;
+    }
+
+    /* ────────────── 03. Filter buttons and hero composition ────────────── */
+    function renderHeroImages() {
+      // These three source paths come from PRODUCTS (not separate hardcoded paths).
+      const picks = [PRODUCTS[0], PRODUCTS[5], PRODUCTS[10]];
+      for (const product of picks) {
+        const character = CHARACTERS.find(c => c.id === product.characterId);
+        const card = document.createElement("div");
+        card.className = "polaroid";
+        const visual = document.createElement("div");
+        visual.className = "polaroid-visual";
+        visual.append(makeImage(product.imagePath, `${character.displayName} 的週邊圖片`));
+        const caption = document.createElement("p");
+        caption.textContent = character.displayName;
+        card.append(visual, caption);
+        $("hero-board").append(card);
+      }
+    }
+    function renderFilterChips() {
+      const host = $("character-filters");
+      // Updating in place preserves keyboard focus on the active filter button.
+      if (host.childElementCount === CHARACTERS.length + 1) {
+        host.querySelectorAll(".filter-chip").forEach(chip => {
+          chip.setAttribute("aria-pressed", String(chip.dataset.filter === state.filter));
+        });
+        return;
+      }
+      host.replaceChildren();
+      const choices = [{ id: "all", displayName: "全部角色", accent: "#e5b2c4" }, ...CHARACTERS];
+      for (const item of choices) {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "filter-chip";
+        chip.dataset.filter = item.id;
+        chip.setAttribute("aria-pressed", String(state.filter === item.id));
+        chip.style.setProperty("--chip-color", item.accent);
+        const dot = document.createElement("span");
+        dot.className = "chip-dot";
+        dot.setAttribute("aria-hidden", "true");
+        chip.append(dot, document.createTextNode(item.displayName));
+        chip.addEventListener("click", () => changeFilter(item.id));
+        host.append(chip);
+      }
+    }
+
+    /* ────────────── 04. Product list and character sections ────────────── */
+    function makeFavoriteButton(product) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "favorite-btn";
+      btn.dataset.favoriteId = product.id;
+      btn.setAttribute("aria-pressed", String(state.favorites.has(product.id)));
+      btn.setAttribute("aria-label", `${state.favorites.has(product.id) ? "移除" : "加入"}收藏：${product.displayName}`);
+      btn.title = state.favorites.has(product.id) ? "移除收藏" : "加入收藏";
+      btn.append(iconHeart());
+      btn.addEventListener("click", () => toggleFavorite(product.id, btn));
+      return btn;
+    }
+    function makeProductCard(product) {
+      const character = CHARACTERS.find(c => c.id === product.characterId);
+      const article = document.createElement("article");
+      article.className = "product-card";
+      article.dataset.productId = product.id;
+
+      const opener = document.createElement("button");
+      opener.type = "button";
+      opener.className = "product-open";
+      opener.setAttribute("aria-label", `放大查看 ${product.displayName}，名稱待確認`);
+      const imageWrap = document.createElement("div");
+      imageWrap.className = "product-image-wrap";
+      imageWrap.append(
+        makeImage(product.imagePath, `${character.displayName} 第 ${product.order} 張週邊展示圖片（商品名稱待確認）`),
+        makeFallback(product.imagePath)
+      );
+      const info = document.createElement("div");
+      info.className = "product-info";
+      const title = document.createElement("p");
+      title.className = "product-name";
+      title.textContent = product.displayName;
+      const subtitle = document.createElement("div");
+      subtitle.className = "product-subtitle";
+      subtitle.textContent = product.nameVerified ? "" : "商品名稱待確認 ✧";
+      info.append(title, subtitle);
+      opener.append(imageWrap, info);
+      opener.addEventListener("click", () => openProductDialog(product.id, opener));
+      article.append(opener, makeFavoriteButton(product));
+      return article;
+    }
+    function makeCharacterSection(character, products) {
+      const section = document.createElement("section");
+      section.className = "character-section";
+      section.id = `character-${character.id}`;
+      section.style.setProperty("--section-accent", character.accent);
+      section.setAttribute("aria-labelledby", `character-heading-${character.id}`);
+      const head = document.createElement("div");
+      head.className = "character-head";
+      const index = document.createElement("div");
+      index.className = "character-index";
+      index.setAttribute("aria-hidden", "true");
+      index.textContent = String(character.order).padStart(2, "0");
+      const text = document.createElement("div");
+      text.className = "character-copy";
+      const overline = document.createElement("span");
+      overline.className = "character-overline";
+      overline.textContent = state.view === "favorites" ? `${products.length} 件收藏` : `SKZOO CHARACTER · ${products.length} PHOTOS`;
+      const heading = document.createElement("h3");
+      heading.id = `character-heading-${character.id}`;
+      heading.textContent = character.displayName;
+      const intro = document.createElement("p");
+      intro.textContent = character.shortIntro;
+      const details = document.createElement("details");
+      details.className = "intro-details";
+      const summary = document.createElement("summary");
+      summary.textContent = "展開更多角色介紹";
+      const detailCopy = document.createElement("p");
+      detailCopy.textContent = character.longIntro;
+      details.append(summary, detailCopy);
+      text.append(overline, heading, intro, details);
+      head.append(index, text);
+      const grid = document.createElement("div");
+      grid.className = "product-grid";
+      for (const product of products) grid.append(makeProductCard(product));
+      section.append(head, grid);
+      return section;
+    }
+    function makeEmptyState() {
+      const el = document.createElement("div");
+      el.className = "empty-state";
+      const icon = document.createElement("div");
+      icon.className = "empty-icon";
+      icon.textContent = "♡";
+      icon.setAttribute("aria-hidden", "true");
+      const title = document.createElement("h3");
+      const text = document.createElement("p");
+      const action = document.createElement("button");
+      action.type = "button";
+      action.className = "pill-btn primary";
+      if (state.favorites.size > 0 && state.filter !== "all") {
+        title.textContent = "這個角色還沒有收藏呢";
+        text.textContent = "其他角色可能已有喜歡的週邊，切換成全部角色看看吧！";
+        action.textContent = "查看全部角色的收藏 ♡";
+        action.addEventListener("click", () => changeFilter("all"));
+      } else {
+        title.textContent = "收藏本還是空白的 ♡";
+        text.textContent = "看到喜歡的週邊，就點一下小愛心，把它放進自己的收藏清單！";
+        action.textContent = "去逛逛週邊 ↗";
+        action.addEventListener("click", () => changeView("all"));
+      }
+      el.append(icon, title, text, action);
+      return el;
+    }
+    function renderGallery() {
+      const host = $("gallery");
+      const fragment = document.createDocumentFragment();
+      let shownCount = 0;
+      for (const character of CHARACTERS) {
+        if (state.filter !== "all" && state.filter !== character.id) continue;
+        let items = PRODUCTS.filter(p => p.characterId === character.id);
+        if (state.view === "favorites") items = items.filter(p => state.favorites.has(p.id));
+        if (!items.length) continue;
+        fragment.append(makeCharacterSection(character, items));
+        shownCount += items.length;
+      }
+      if (shownCount === 0) fragment.append(makeEmptyState());
+      host.replaceChildren(fragment);
+      $("results-status").textContent = state.view === "favorites"
+        ? `目前顯示 ${shownCount} 件收藏・${state.filter === "all" ? "全部角色" : CHARACTERS.find(c => c.id === state.filter).displayName}`
+        : `目前顯示 ${shownCount} 張圖片・${state.filter === "all" ? "全部 8 位角色" : CHARACTERS.find(c => c.id === state.filter).displayName}`;
+      $("collection-title").textContent = state.view === "favorites" ? "我的小小收藏" : "角色與週邊小日記";
+      $("collection-subtitle").textContent = state.view === "favorites" ? "所有喜歡的週邊，都收藏在同一頁 ♡" : "每一個角色，都有屬於自己的可愛角落。";
+      const isAll = state.view === "all";
+      $("view-all").classList.toggle("is-active", isAll);
+      $("view-favorites").classList.toggle("is-active", !isAll);
+      $("view-all").setAttribute("aria-pressed", String(isAll));
+      $("view-favorites").setAttribute("aria-pressed", String(!isAll));
+      $("header-favorites").classList.toggle("is-active", !isAll);
+      $("header-favorites").setAttribute("aria-pressed", String(!isAll));
+      $("header-favorites").setAttribute("aria-label", !isAll ? "目前為收藏清單，返回全部週邊" : "查看收藏清單");
+    }
+    function changeFilter(characterId) {
+      state.filter = characterId;
+      renderFilterChips();
+      renderGallery();
+      const section = characterId === "all" ? null : $("character-" + characterId);
+      scrollToArea(section || $("collection"));
+    }
+    function changeView(view) {
+      state.view = view;
+      // Reset the character filter so opening favorites always shows the whole list.
+      state.filter = "all";
+      renderFilterChips();
+      renderGallery();
+      scrollToArea($("collection"));
+    }
+    function updateFavoriteVisuals() {
+      $("header-count").textContent = state.favorites.size;
+      $("toolbar-count").textContent = `(${state.favorites.size})`;
+      document.querySelectorAll("[data-favorite-id]").forEach(btn => {
+        const id = btn.dataset.favoriteId;
+        const product = PRODUCTS_BY_ID.get(id);
+        const active = state.favorites.has(id);
+        btn.setAttribute("aria-pressed", String(active));
+        btn.setAttribute("aria-label", `${active ? "移除" : "加入"}收藏：${product.displayName}`);
+        btn.title = active ? "移除收藏" : "加入收藏";
+      });
+      const modalId = state.currentModalProductId;
+      if (modalId) {
+        const liked = state.favorites.has(modalId);
+        $("modal-favorite").setAttribute("aria-pressed", String(liked));
+        $("modal-favorite").textContent = liked ? "♥ 已加入收藏（點擊移除）" : "♡ 加入收藏";
+      }
+    }
+    function toggleFavorite(id, clickedButton = null) {
+      if (!PRODUCTS_BY_ID.has(id)) return;
+      const wasLiked = state.favorites.has(id);
+      if (wasLiked) state.favorites.delete(id);
+      else state.favorites.add(id);
+      const saved = saveFavorites();
+      updateFavoriteVisuals();
+      showToast(saved
+        ? (wasLiked ? "已從收藏清單移除 ♡" : "已加入我的小小收藏 ♥")
+        : "收藏已更新，但瀏覽器無法保存；重新整理後可能不會保留。",
+        saved ? 2400 : 4200);
+      if (state.view === "favorites") {
+        if ($("product-dialog").open) {
+          // Preserve dialog focus while it is open; update background on close.
+          state.refreshFavoritesAfterDialog = true;
+        } else {
+          renderGallery();
+          // In favorites view a removed product no longer exists; keep keyboard focus accessible.
+          if (clickedButton) $("view-favorites").focus({ preventScroll: true });
+        }
+      }
+    }
+
+    /* ────────────── 05. Accessible product dialog ────────────── */
+    function openProductDialog(id, trigger) {
+      const product = PRODUCTS_BY_ID.get(id);
+      if (!product) return;
+      const character = CHARACTERS.find(c => c.id === product.characterId);
+      const dialog = $("product-dialog");
+      state.currentModalProductId = id;
+      state.modalReturnTarget = trigger;
+      $("modal-character").textContent = `✿ ${character.displayName} · PHOTO ${String(product.order).padStart(2,"0")}/05`;
+      $("modal-title").textContent = product.displayName;
+      const wrap = $("modal-image-wrap");
+      wrap.classList.remove("is-missing");
+      $("modal-image").src = product.imagePath;
+      $("modal-image").alt = `${character.displayName} 第 ${product.order} 張週邊圖片（名稱待確認）`;
+      $("modal-missing-path").textContent = product.imagePath;
+      const extra = $("modal-extra");
+      extra.replaceChildren();
+      // Only show fields for which there is real information; none are guessed.
+      for (const [label, value] of [["類型",product.type],["系列",product.series],["說明",product.description],["備註",product.note]]) {
+        if (!value) continue;
+        const row = document.createElement("p");
+        row.textContent = `${label}：${value}`;
+        extra.append(row);
+      }
+      extra.hidden = extra.childElementCount === 0;
+      updateFavoriteVisuals();
+      dialog.showModal();
+      document.body.classList.add("modal-open");
+      $("dialog-close").focus();
+    }
+    function closeProductDialog() { if ($("product-dialog").open) $("product-dialog").close(); }
+    $("modal-image").addEventListener("error", () => $("modal-image-wrap").classList.add("is-missing"));
+    $("product-dialog").addEventListener("click", event => {
+      // Click outside the dialog's actual visible rectangle to close.
+      if (event.target === $("product-dialog")) closeProductDialog();
+    });
+    $("product-dialog").addEventListener("close", () => {
+      document.body.classList.remove("modal-open");
+      const target = state.modalReturnTarget;
+      state.currentModalProductId = null;
+      state.modalReturnTarget = null;
+      if (state.refreshFavoritesAfterDialog) {
+        renderGallery();
+        state.refreshFavoritesAfterDialog = false;
+      }
+      if (target && target.isConnected) target.focus({ preventScroll: true });
+      else $("view-favorites").focus({ preventScroll: true });
+    });
+    $("dialog-close").addEventListener("click", closeProductDialog);
+    $("modal-done").addEventListener("click", closeProductDialog);
+    $("modal-favorite").addEventListener("click", () => {
+      if (state.currentModalProductId) toggleFavorite(state.currentModalProductId);
+    });
+
+    /* ────────────── 06. Navigation and initialization ────────────── */
+    function backHome() {
+      closeProductDialog();
+      state.view = "all";
+      state.filter = "all";
+      renderFilterChips();
+      renderGallery();
+      window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+    }
+    document.querySelectorAll("[data-home]").forEach(link => link.addEventListener("click", event => {
+      event.preventDefault();
+      backHome();
+    }));
+    $("back-top").addEventListener("click", backHome);
+    $("view-all").addEventListener("click", () => changeView("all"));
+    $("view-favorites").addEventListener("click", () => changeView("favorites"));
+    $("hero-favorites").addEventListener("click", () => changeView("favorites"));
+    $("header-favorites").addEventListener("click", () => changeView(state.view === "favorites" ? "all" : "favorites"));
+    function updateBackToTop() { $("back-top").classList.toggle("is-visible", window.scrollY > 450); }
+    window.addEventListener("scroll", updateBackToTop, { passive: true });
+
+    state.favorites = loadFavorites();
+    renderHeroImages();
+    renderFilterChips();
+    renderGallery();
+    updateFavoriteVisuals();
+    updateBackToTop();
+  </script>
+</body>
+</html>
