@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#FFF9F3">
   <meta name="description" content="SKZOO 角色與週邊典藏展示網站，收錄八位角色、40 款收藏，支援角色篩選、商品詳情與愛心收藏。">
   <title>SKZOO Collection｜粉色收藏手帳</title>
+
   <style>
     :root {
       --cream: #FFF9F3;
@@ -20,8 +21,16 @@
       --shadow: 0 12px 32px rgba(126, 72, 98, .10);
       --container: 1200px;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
     body {
       margin: 0;
       min-width: 320px;
@@ -32,367 +41,1197 @@
       font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
       line-height: 1.6;
     }
-    body.dialog-open { overflow: hidden; }
-    button { font: inherit; cursor: pointer; }
-    button:focus-visible, a:focus-visible, summary:focus-visible {
-      outline: 3px solid var(--pink-dark); outline-offset: 3px;
+
+    body.dialog-open {
+      overflow: hidden;
     }
-    a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
-    [hidden] { display: none !important; }
-    .container { width: min(calc(100% - 32px), var(--container)); margin-inline: auto; }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--pink-dark);
+      outline-offset: 3px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--container));
+      margin-inline: auto;
+    }
+
+    /* =========================
+       Header
+    ========================= */
+
     .site-header {
-      position: sticky; top: 0; z-index: 30;
+      position: sticky;
+      top: 0;
+      z-index: 30;
       background: rgba(255, 249, 243, .96);
       border-bottom: 1px solid var(--line);
       backdrop-filter: blur(12px);
     }
+
     .header-inner {
-      min-height: 72px; display: flex; align-items: center;
-      justify-content: space-between; gap: 12px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
-    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 900; font-size: 19px; }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 19px;
+    }
+
     .brand-mark {
-      display: grid; place-items: center; width: 39px; height: 39px;
-      background: var(--blush); color: var(--pink-dark);
-      border-radius: 13px; font-size: 24px; transform: rotate(-9deg);
+      display: grid;
+      place-items: center;
+      width: 39px;
+      height: 39px;
+      background: var(--blush);
+      color: var(--pink-dark);
+      border-radius: 13px;
+      font-size: 24px;
+      transform: rotate(-9deg);
     }
-    .brand span:last-child em { font-style: normal; color: var(--pink); }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .header-link { font-weight: 700; font-size: 13px; }
+
+    .brand span:last-child em {
+      font-style: normal;
+      color: var(--pink);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-link {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
     .button {
-      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-      padding: 10px 16px; border: 1px solid #E9C5D2;
-      border-radius: 999px; background: #fff; color: var(--pink-dark);
-      font-weight: 800; font-size: 13px; line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      border: 1px solid #E9C5D2;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--pink-dark);
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.3;
       transition: transform .2s, background .2s, box-shadow .2s;
     }
-    .button:hover { transform: translateY(-2px); background: #FFF0F5; box-shadow: 0 6px 14px #9c59701a; }
-    .button.primary, .button[aria-pressed="true"] {
-      background: var(--pink); border-color: var(--pink); color: #fff;
+
+    .button:hover {
+      transform: translateY(-2px);
+      background: #FFF0F5;
+      box-shadow: 0 6px 14px #9c59701a;
     }
+
+    .button.primary,
+    .button[aria-pressed="true"] {
+      background: var(--pink);
+      border-color: var(--pink);
+      color: #fff;
+    }
+
     .counter {
-      min-width: 20px; padding: 1px 6px; border-radius: 999px;
-      background: #FBE6EE; color: #96516E; font-size: 11px;
+      min-width: 20px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #FBE6EE;
+      color: #96516E;
+      font-size: 11px;
     }
-    .hero { padding: 60px 0 46px; overflow: hidden; }
-    .hero-inner { display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 30px; }
-    .eyebrow { color: var(--pink-dark); font-size: 11px; font-weight: 900; letter-spacing: .2em; }
-    h1 { margin: 13px 0 18px; font-size: clamp(38px, 5vw, 66px); line-height: 1.22; letter-spacing: -.05em; }
-    h1 span { color: var(--pink); }
-    .hero-description { color: var(--muted); max-width: 510px; line-height: 2; font-size: 15px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-    .hero-caption { margin-top: 23px; font-size: 11px; color: var(--pink-dark); letter-spacing: .13em; }
-    .scrapbook { position: relative; min-height: 370px; }
+
+    /* =========================
+       Hero
+    ========================= */
+
+    .hero {
+      padding: 60px 0 46px;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .eyebrow {
+      color: var(--pink-dark);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .2em;
+    }
+
+    h1 {
+      margin: 13px 0 18px;
+      font-size: clamp(38px, 5vw, 66px);
+      line-height: 1.22;
+      letter-spacing: -.05em;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    .hero-description {
+      color: var(--muted);
+      max-width: 510px;
+      line-height: 2;
+      font-size: 15px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .hero-caption {
+      margin-top: 23px;
+      font-size: 11px;
+      color: var(--pink-dark);
+      letter-spacing: .13em;
+    }
+
+    /* =========================
+       Scrapbook decoration
+    ========================= */
+
+    .scrapbook {
+      position: relative;
+      min-height: 370px;
+    }
+
     .scrapbook::before {
-      content: ""; position: absolute; inset: 35px 12px 20px;
-      background: #FFF1EB; border: 2px dashed #E7BCCD;
-      border-radius: 28px; transform: rotate(-5deg); box-shadow: 11px 14px 0 #FCE5EE;
+      content: "";
+      position: absolute;
+      inset: 35px 12px 20px;
+      background: #FFF1EB;
+      border: 2px dashed #E7BCCD;
+      border-radius: 28px;
+      transform: rotate(-5deg);
+      box-shadow: 11px 14px 0 #FCE5EE;
     }
+
     .snapshot {
-      position: absolute; z-index: 1; width: 150px;
-      padding: 9px 9px 22px; border-radius: 5px;
-      background: white; box-shadow: 0 12px 22px #80506430;
+      position: absolute;
+      z-index: 1;
+      width: 150px;
+      padding: 9px 9px 22px;
+      border-radius: 5px;
+      background: white;
+      box-shadow: 0 12px 22px #80506430;
       text-align: center;
     }
-    .snapshot:nth-child(1) { left: 5%; top: 8%; transform: rotate(-11deg); }
-    .snapshot:nth-child(2) { right: 4%; top: 14%; transform: rotate(10deg); }
-    .snapshot:nth-child(3) { left: 34%; bottom: 2%; transform: rotate(3deg); }
-    .snapshot-image { aspect-ratio: 1 / 1; padding: 8px; background: var(--cream); }
-    .snapshot-image img { width: 100%; height: 100%; object-fit: contain; }
-    .snapshot-caption { margin-top: 8px; font-size: 12px; font-weight: 900; color: #AA7189; }
+
+    .snapshot:nth-child(1) {
+      left: 5%;
+      top: 8%;
+      transform: rotate(-11deg);
+    }
+
+    .snapshot:nth-child(2) {
+      right: 4%;
+      top: 14%;
+      transform: rotate(10deg);
+    }
+
+    .snapshot:nth-child(3) {
+      left: 34%;
+      bottom: 2%;
+      transform: rotate(3deg);
+    }
+
+    .snapshot-image {
+      aspect-ratio: 1 / 1;
+      padding: 8px;
+      background: #fcf8f2;
+    }
+
+    .snapshot-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .snapshot-caption {
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #AA7189;
+    }
+
     .scrapbook-note {
-      position: absolute; top: 0; right: 2%; z-index: 2;
-      transform: rotate(7deg); border-radius: 6px; padding: 5px 10px;
-      background: #FFF0B8; color: #927344; font-size: 11px;
+      position: absolute;
+      top: 0;
+      right: 2%;
+      z-index: 2;
+      transform: rotate(7deg);
+      border-radius: 6px;
+      padding: 5px 10px;
+      background: #FFF0B8;
+      color: #927344;
+      font-size: 11px;
     }
-    .scrapbook-heart { position: absolute; bottom: 12%; left: 7%; color: #E3A3B9; font-size: 39px; }
-    .collection { padding: 37px 0 85px; }
-    .section-heading { margin-bottom: 27px; text-align: center; }
-    .section-heading small { font-weight: 900; color: var(--pink-dark); letter-spacing: .16em; }
-    .section-heading h2 { font-size: clamp(26px, 3.5vw, 40px); margin: 5px 0; }
-    .section-heading p { font-size: 14px; color: var(--muted); margin: 0; }
+
+    .scrapbook-heart {
+      position: absolute;
+      bottom: 12%;
+      left: 7%;
+      color: #E3A3B9;
+      font-size: 39px;
+    }
+
+    /* =========================
+       Collection
+    ========================= */
+
+    .collection {
+      padding: 37px 0 85px;
+    }
+
+    .section-heading {
+      margin-bottom: 27px;
+      text-align: center;
+    }
+
+    .section-heading small {
+      font-weight: 900;
+      color: var(--pink-dark);
+      letter-spacing: .16em;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(26px, 3.5vw, 40px);
+      margin: 5px 0;
+    }
+
+    .section-heading p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+    }
+
     .toolbar {
-      padding: 19px 20px; border: 1px solid var(--line); border-radius: 24px;
-      background: rgba(255,255,255,.95); box-shadow: var(--shadow);
+      padding: 19px 20px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,.95);
+      box-shadow: var(--shadow);
     }
-    .toolbar-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .toolbar-top strong { font-size: 14px; }
-    .toolbar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+
+    .toolbar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-top strong {
+      font-size: 14px;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
     .chip {
-      padding: 8px 12px; border: 1px solid #EBD6DF; border-radius: 999px;
-      color: #806571; background: white; font-size: 12px; font-weight: 800;
+      padding: 8px 12px;
+      border: 1px solid #EBD6DF;
+      border-radius: 999px;
+      color: #806571;
+      background: white;
+      font-size: 12px;
+      font-weight: 800;
     }
-    .chip:hover, .chip[aria-pressed="true"] {
-      border-color: #D7A0B5; color: #995371; background: #FBE5ED;
+
+    .chip:hover,
+    .chip[aria-pressed="true"] {
+      border-color: #D7A0B5;
+      color: #995371;
+      background: #FBE5ED;
     }
-    .chip[aria-pressed="true"] { box-shadow: inset 0 0 0 1px #D7A0B5; }
-    .result-count { margin: 16px 5px 22px; font-size: 12px; color: var(--muted); }
+
+    .chip[aria-pressed="true"] {
+      box-shadow: inset 0 0 0 1px #D7A0B5;
+    }
+
+    .result-count {
+      margin: 16px 5px 22px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       Character Sections
+    ========================= */
+
     .character {
-      position: relative; overflow: hidden; margin-bottom: 25px;
-      padding: clamp(17px, 2.6vw, 30px); border: 1px solid var(--line);
-      border-radius: 27px; background: rgba(255,255,255,.95);
-      box-shadow: var(--shadow); scroll-margin-top: 94px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 25px;
+      padding: clamp(17px, 2.6vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: 27px;
+      background: rgba(255,255,255,.95);
+      box-shadow: var(--shadow);
+      scroll-margin-top: 94px;
     }
+
     .character::before {
-      content: ""; position: absolute; top: -55px; left: -48px;
-      width: 160px; height: 160px; border-radius: 50%;
-      background: var(--accent); opacity: .6;
+      content: "";
+      position: absolute;
+      top: -55px;
+      left: -48px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: .6;
     }
-    .character-header { position: relative; display: flex; gap: 16px; align-items: flex-start; margin-bottom: 22px; }
+
+    .character-header {
+      position: relative;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
     .character-index {
-      flex: 0 0 64px; width: 64px; height: 64px; display: grid; place-items: center;
-      border-radius: 19px; background: var(--accent); transform: rotate(-7deg);
-      font-size: 22px; font-weight: 900;
+      flex: 0 0 64px;
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border-radius: 19px;
+      background: var(--accent);
+      transform: rotate(-7deg);
+      font-size: 22px;
+      font-weight: 900;
     }
-    .overline { color: var(--pink-dark); letter-spacing: .12em; font-size: 10px; font-weight: 900; }
-    .character-name { margin: 2px 0 4px; font-size: clamp(24px, 3vw, 32px); line-height: 1.2; }
-    .member-line { margin: 2px 0; font-size: 12px; color: var(--muted); }
-    .character-summary { margin: 6px 0; font-size: 13px; color: var(--muted); }
-    details { margin-top: 8px; color: #915E78; font-size: 12px; }
-    summary { width: fit-content; font-weight: 800; cursor: pointer; }
-    .details-body { margin: 9px 0; padding: 11px 13px; background: #FFF5F8; border-radius: 12px; color: var(--muted); }
+
+    .overline {
+      color: var(--pink-dark);
+      letter-spacing: .12em;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .character-name {
+      margin: 2px 0 4px;
+      font-size: clamp(24px, 3vw, 32px);
+      line-height: 1.2;
+    }
+
+    .member-line {
+      margin: 2px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .character-summary {
+      margin: 6px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    details {
+      margin-top: 8px;
+      color: #915E78;
+      font-size: 12px;
+    }
+
+    summary {
+      width: fit-content;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .details-body {
+      margin: 9px 0;
+      padding: 11px 13px;
+      background: #FFF5F8;
+      border-radius: 12px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       Product Grid
+       Desktop: 5 columns
+       Tablet: 3 columns
+       Mobile: 2 columns
+    ========================= */
+
     .product-grid {
-      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 14px; align-items: stretch;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
     }
+
     .product-card {
-      min-width: 0; position: relative; overflow: hidden;
-      border: 1px solid #F1E3E9; border-radius: 18px;
-      background: #fff; transition: transform .2s, box-shadow .2s;
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #F1E3E9;
+      border-radius: 18px;
+      background: #fff;
+      transition: transform .2s, box-shadow .2s;
     }
-    .product-card:hover { transform: translateY(-4px); box-shadow: 0 13px 25px #925C7022; }
-    .product-open { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; }
-    .product-visual {
-      width: 100%; aspect-ratio: 1 / 1; padding: 12px;
-      display: grid; place-items: center;
-      background: #FFF9F3;
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 13px 25px #925C7022;
     }
-    .product-visual img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
-    .product-name { min-height: 78px; padding: 13px 14px; padding-right: 34px; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+
+    .product-open {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+    }
+
+    /* =========================
+       ★ 商品圖片統一化修正 ★
+       1. 固定 1:1 正方形
+       2. 統一奶油白背景
+       3. 統一 16px padding
+       4. 商品最大顯示 85%
+       5. 保留完整圖片，不裁切
+    ========================= */
+
+    .card-img-container {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      padding: 16px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-color: #fcf8f2;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+    }
+
+    .card-img-container img {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      max-width: 85%;
+      max-height: 85%;
+
+      object-fit: contain;
+      object-position: center;
+
+      margin: auto;
+    }
+
+    .product-name {
+      min-height: 78px;
+      padding: 13px 14px;
+      padding-right: 34px;
+      font-size: 13px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
     .favorite-heart {
-      position: absolute; z-index: 2; top: 9px; right: 9px;
-      width: 37px; height: 37px; border: 1px solid #F0D9E3;
-      border-radius: 50%; background: #FFFC; color: #AB7790; font-size: 22px;
+      position: absolute;
+      z-index: 2;
+      top: 9px;
+      right: 9px;
+      width: 37px;
+      height: 37px;
+      border: 1px solid #F0D9E3;
+      border-radius: 50%;
+      background: #FFFC;
+      color: #AB7790;
+      font-size: 22px;
     }
-    .favorite-heart[aria-pressed="true"] { background: #FFE4EE; color: #CE648D; }
-    .image-error { padding: 12px; text-align: center; font-size: 11px; color: #A27589; overflow-wrap: anywhere; }
+
+    .favorite-heart[aria-pressed="true"] {
+      background: #FFE4EE;
+      color: #CE648D;
+    }
+
+    .image-error {
+      padding: 12px;
+      text-align: center;
+      font-size: 11px;
+      color: #A27589;
+      overflow-wrap: anywhere;
+    }
+
     .empty {
-      padding: 55px 20px; border: 1px dashed #DBAFC2;
-      border-radius: 24px; background: white; text-align: center;
+      padding: 55px 20px;
+      border: 1px dashed #DBAFC2;
+      border-radius: 24px;
+      background: white;
+      text-align: center;
     }
-    .empty-icon { color: #DD9AB4; font-size: 52px; }
-    .empty p { font-size: 13px; color: var(--muted); }
+
+    .empty-icon {
+      color: #DD9AB4;
+      font-size: 52px;
+    }
+
+    .empty p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* =========================
+       Footer
+    ========================= */
+
     .footer {
-      padding: 37px 16px; border-top: 1px solid var(--line);
-      background: #FFF0F5; text-align: center; font-size: 12px; color: var(--muted);
+      padding: 37px 16px;
+      border-top: 1px solid var(--line);
+      background: #FFF0F5;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
     }
-    .footer strong { color: var(--pink-dark); font-size: 17px; }
-    .back-top { position: fixed; bottom: 20px; right: 19px; z-index: 20; box-shadow: var(--shadow); }
+
+    .footer strong {
+      color: var(--pink-dark);
+      font-size: 17px;
+    }
+
+    .back-top {
+      position: fixed;
+      bottom: 20px;
+      right: 19px;
+      z-index: 20;
+      box-shadow: var(--shadow);
+    }
+
+    /* =========================
+       Product Detail Dialog
+    ========================= */
+
     dialog {
-      width: min(910px, calc(100vw - 28px)); max-height: min(90dvh, 820px);
-      padding: 0; border: 1px solid #EED6DF; border-radius: 24px;
-      color: var(--ink); background: white; box-shadow: 0 28px 90px #4C2A3E66;
+      width: min(910px, calc(100vw - 28px));
+      max-height: min(90dvh, 820px);
+      padding: 0;
+      border: 1px solid #EED6DF;
+      border-radius: 24px;
+      color: var(--ink);
+      background: white;
+      box-shadow: 0 28px 90px #4C2A3E66;
       overflow: auto;
     }
-    dialog::backdrop { background: #3D2634B8; backdrop-filter: blur(4px); }
-    .modal-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); }
+
+    dialog::backdrop {
+      background: #3D2634B8;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);
+    }
+
     .modal-visual {
-      aspect-ratio: 1 / 1; min-width: 0; padding: 18px;
-      display: grid; place-items: center; background: #FFF9F3;
+      aspect-ratio: 1 / 1;
+      min-width: 0;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      background: #fcf8f2;
     }
-    .modal-visual img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
-    .modal-info { padding: 45px 28px 28px; min-width: 0; }
-    .modal-info h2 { margin: 8px 0 15px; font-size: clamp(20px, 2.5vw, 27px); line-height: 1.4; }
-    .spec-list { margin: 0; display: grid; gap: 12px; }
-    .spec-row { padding-bottom: 10px; border-bottom: 1px dashed #EDDAE2; }
-    .spec-row dt { color: var(--pink-dark); font-size: 12px; font-weight: 900; }
-    .spec-row dd { margin: 4px 0 0; font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
-    .modal-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 21px; }
+
+    .modal-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .modal-info {
+      padding: 45px 28px 28px;
+      min-width: 0;
+    }
+
+    .modal-info h2 {
+      margin: 8px 0 15px;
+      font-size: clamp(20px, 2.5vw, 27px);
+      line-height: 1.4;
+    }
+
+    .spec-list {
+      margin: 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .spec-row {
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #EDDAE2;
+    }
+
+    .spec-row dt {
+      color: var(--pink-dark);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .spec-row dd {
+      margin: 4px 0 0;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 21px;
+    }
+
     .modal-close {
-      position: absolute; top: 10px; right: 11px; z-index: 3;
-      width: 40px; height: 40px; padding: 0; border: 0;
-      border-radius: 50%; background: #FFFFFFF2; color: var(--ink); font-size: 26px;
+      position: absolute;
+      top: 10px;
+      right: 11px;
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #FFFFFFF2;
+      color: var(--ink);
+      font-size: 26px;
     }
+
     .toast {
-      position: fixed; left: 50%; bottom: 22px; z-index: 60;
-      max-width: calc(100vw - 24px); transform: translate(-50%, 20px);
-      padding: 11px 18px; border-radius: 999px; background: #65485A;
-      color: white; text-align: center; font-size: 13px;
-      opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 60;
+      max-width: calc(100vw - 24px);
+      transform: translate(-50%, 20px);
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: #65485A;
+      color: white;
+      text-align: center;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
     }
-    .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================
+       Responsive Design
+    ========================= */
+
     @media (max-width: 1030px) {
-      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .snapshot { width: 130px; }
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .snapshot {
+        width: 130px;
+      }
     }
+
     @media (max-width: 720px) {
-      .header-inner { min-height: 65px; }
-      .brand { font-size: 15px; }
-      .brand-mark { width: 33px; height: 33px; font-size: 19px; }
-      .header-link { display: none; }
-      .header-right .button { padding: 9px 11px; font-size: 12px; }
-      .hero { padding: 34px 0 24px; }
-      .hero-inner { grid-template-columns: 1fr; }
-      .scrapbook { width: min(100%, 430px); min-height: 290px; margin-inline: auto; }
-      .snapshot { width: 125px; }
-      .snapshot:nth-child(1) { left: 4%; }
-      .snapshot:nth-child(2) { right: 3%; }
-      .snapshot:nth-child(3) { left: 32%; }
-      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-      .product-name { min-height: 89px; padding: 11px 9px; padding-right: 29px; font-size: 12px; }
-      .character-header { gap: 12px; }
-      .character-index { flex-basis: 46px; width: 46px; height: 46px; font-size: 17px; }
-      .modal-layout { grid-template-columns: 1fr; }
-      .modal-visual { width: 100%; max-height: 43dvh; }
-      .modal-info { padding: 21px; }
-      .back-top { right: 12px; bottom: 12px; }
+      .header-inner {
+        min-height: 65px;
+      }
+
+      .brand {
+        font-size: 15px;
+      }
+
+      .brand-mark {
+        width: 33px;
+        height: 33px;
+        font-size: 19px;
+      }
+
+      .header-link {
+        display: none;
+      }
+
+      .header-right .button {
+        padding: 9px 11px;
+        font-size: 12px;
+      }
+
+      .hero {
+        padding: 34px 0 24px;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .scrapbook {
+        width: min(100%, 430px);
+        min-height: 290px;
+        margin-inline: auto;
+      }
+
+      .snapshot {
+        width: 125px;
+      }
+
+      .snapshot:nth-child(1) {
+        left: 4%;
+      }
+
+      .snapshot:nth-child(2) {
+        right: 3%;
+      }
+
+      .snapshot:nth-child(3) {
+        left: 32%;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .product-name {
+        min-height: 89px;
+        padding: 11px 9px;
+        padding-right: 29px;
+        font-size: 12px;
+      }
+
+      .character-header {
+        gap: 12px;
+      }
+
+      .character-index {
+        flex-basis: 46px;
+        width: 46px;
+        height: 46px;
+        font-size: 17px;
+      }
+
+      .modal-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-visual {
+        width: 100%;
+        max-height: 43dvh;
+      }
+
+      .modal-info {
+        padding: 21px;
+      }
+
+      .back-top {
+        right: 12px;
+        bottom: 12px;
+      }
     }
+
     @media (max-width: 380px) {
-      .brand span:last-child { font-size: 14px; }
-      .toolbar { padding: 16px 12px; }
-      .product-visual { padding: 12px; }
-      .snapshot { width: 111px; }
+      .brand span:last-child {
+        font-size: 14px;
+      }
+
+      .toolbar {
+        padding: 16px 12px;
+      }
+
+      .snapshot {
+        width: 111px;
+      }
     }
+
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
+
+  <!-- =========================
+       Header
+  ========================= -->
+
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a href="#top" class="brand" id="logo-home" aria-label="回到首頁">
         <span class="brand-mark" aria-hidden="true">✿</span>
         <span>SKZOO <em>Collection</em></span>
       </a>
+
       <div class="header-right">
         <a class="header-link" href="#collection">探索角色</a>
         <button class="button" type="button" id="header-favorites">
-          ♡ 收藏清單 <span class="counter" id="header-count">0</span>
+          ♡ 收藏清單
+          <span class="counter" id="header-count">0</span>
         </button>
       </div>
     </div>
   </header>
 
   <main>
+
+    <!-- =========================
+         Hero
+    ========================= -->
+
     <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-inner">
+
         <div>
           <div class="eyebrow">MY LITTLE SKZOO ARCHIVE</div>
-          <h1 id="hero-title">收藏每一份<br><span>可愛的心動 ✳</span></h1>
-          <p class="hero-description">歡迎來到 SKZOO 粉色典藏手帳！依照成員年齡順序，把八個角色、四十款週邊整整齊齊收藏在這裡。點進卡片看詳細規格，也可以為喜歡的收藏按下愛心 ♡</p>
+          <h1 id="hero-title">
+            收藏每一份<br>
+            <span>可愛的心動 ✳</span>
+          </h1>
+
+          <p class="hero-description">
+            歡迎來到 SKZOO 粉色典藏手帳！
+            依照成員年齡順序，把八個角色、四十款週邊整整齊齊收藏在這裡。
+            點進卡片看詳細規格，也可以為喜歡的收藏按下愛心 ♡
+          </p>
+
           <div class="hero-actions">
-            <a class="button primary" href="#collection">開始逛逛 ↗</a>
-            <button class="button" type="button" id="hero-favorites">♡ 看我的收藏</button>
+            <a class="button primary" href="#collection">
+              開始逛逛 ↗
+            </a>
+            <button class="button" type="button" id="hero-favorites">
+              ♡ 看我的收藏
+            </button>
           </div>
-          <p class="hero-caption">✧ 8 CHARACTERS · 40 LITTLE TREASURES ✧</p>
+
+          <p class="hero-caption">
+            ✧ 8 CHARACTERS · 40 LITTLE TREASURES ✧
+          </p>
         </div>
+
         <div class="scrapbook" id="scrapbook" aria-label="SKZOO 商品手帳拼貼">
           <span class="scrapbook-note">a little happy place ♡</span>
           <span class="scrapbook-heart" aria-hidden="true">♥</span>
         </div>
+
       </div>
     </section>
 
+    <!-- =========================
+         Collection
+    ========================= -->
+
     <section class="collection" id="collection" aria-labelledby="collection-title">
       <div class="container">
+
         <div class="section-heading">
           <small>♡ THE COLLECTION ♡</small>
           <h2 id="collection-title">角色與週邊小日記</h2>
-          <p id="collection-subtitle">依 Stray Kids 成員生日由早至晚排序，慢慢逛每個角色的可愛角落。</p>
+          <p id="collection-subtitle">
+            依 Stray Kids 成員生日由早至晚排序，慢慢逛每個角色的可愛角落。
+          </p>
         </div>
+
         <div class="toolbar">
           <div class="toolbar-top">
             <strong>✿ 快速導覽・選擇角色</strong>
+
             <div class="toolbar-actions">
-              <button class="button primary" type="button" id="view-all" aria-pressed="true">全部週邊</button>
-              <button class="button" type="button" id="view-favorites" aria-pressed="false">♡ 我的收藏 <span id="favorite-label">(0)</span></button>
+              <button
+                class="button primary"
+                type="button"
+                id="view-all"
+                aria-pressed="true">
+                全部週邊
+              </button>
+
+              <button
+                class="button"
+                type="button"
+                id="view-favorites"
+                aria-pressed="false">
+                ♡ 我的收藏
+                <span id="favorite-label">(0)</span>
+              </button>
             </div>
           </div>
-          <nav class="chips" id="character-nav" aria-label="角色快速導覽"></nav>
+
+          <nav
+            class="chips"
+            id="character-nav"
+            aria-label="角色快速導覽">
+          </nav>
         </div>
-        <p class="result-count" id="result-count" role="status" aria-live="polite"></p>
+
+        <p
+          class="result-count"
+          id="result-count"
+          role="status"
+          aria-live="polite">
+        </p>
+
         <div id="gallery"></div>
+
       </div>
     </section>
+
   </main>
+
+  <!-- =========================
+       Footer
+  ========================= -->
 
   <footer class="footer">
     <strong>✿ SKZOO Collection ♡</strong>
     <p>把小小喜歡，慢慢收藏成大大的快樂。</p>
-    <p>本站為非官方粉絲收藏展示網站，與 Stray Kids、SKZOO 及 JYP Entertainment 無官方隸屬關係。</p>
+    <p>
+      本站為非官方粉絲收藏展示網站，
+      與 Stray Kids、SKZOO 及 JYP Entertainment 無官方隸屬關係。
+    </p>
   </footer>
 
-  <button type="button" class="button back-top" id="back-top" hidden>↑ 返回首頁</button>
+  <button
+    type="button"
+    class="button back-top"
+    id="back-top"
+    hidden>
+    ↑ 返回首頁
+  </button>
+
+  <!-- =========================
+       Product Dialog
+  ========================= -->
 
   <dialog id="product-dialog" aria-labelledby="modal-title">
-    <button type="button" class="modal-close" id="modal-close" aria-label="關閉預覽">×</button>
+    <button
+      type="button"
+      class="modal-close"
+      id="modal-close"
+      aria-label="關閉預覽">
+      ×
+    </button>
+
     <div class="modal-layout">
       <div class="modal-visual" id="modal-visual"></div>
+
       <div class="modal-info">
         <div class="overline" id="modal-character"></div>
         <h2 id="modal-title"></h2>
         <dl class="spec-list" id="modal-specs"></dl>
+
         <div class="modal-actions">
-          <button class="button primary" type="button" id="modal-favorite">♡ 加入收藏</button>
-          <button class="button" type="button" id="modal-previous">← 上一款</button>
-          <button class="button" type="button" id="modal-next">下一款 →</button>
-          <button class="button" type="button" id="modal-done">繼續逛逛</button>
+          <button
+            class="button primary"
+            type="button"
+            id="modal-favorite">
+            ♡ 加入收藏
+          </button>
+
+          <button class="button" type="button" id="modal-previous">
+            ← 上一款
+          </button>
+
+          <button class="button" type="button" id="modal-next">
+            下一款 →
+          </button>
+
+          <button class="button" type="button" id="modal-done">
+            繼續逛逛
+          </button>
         </div>
       </div>
     </div>
   </dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite">
+  </div>
+
+  <!-- =========================
+       JavaScript
+  ========================= -->
 
   <script>
     "use strict";
 
-    // 固定依成員年齡由大至小排列；此順序同時決定篩選與展示區塊順序。
+    // ===================================
+    // 1. 角色資料
+    // 嚴格依 Stray Kids 成員年齡排序
+    // ===================================
+
     const CHARACTERS = [
-      { id: "wolfchan", name: "Wolf Chan", member: "Bang Chan 方燦", birthday: "1997.10.03", slug: "wolfchan", color: "#E8DEEF" },
-      { id: "leebit", name: "Leebit", member: "Lee Know 李旻浩", birthday: "1998.10.25", slug: "leebit", color: "#E2EAF4" },
-      { id: "dwaekki", name: "Dwaekki", member: "Changbin 徐彰彬", birthday: "1999.08.11", slug: "dwaekki", color: "#F8DAE1" },
-      { id: "jiniret", name: "Jiniret", member: "Hyunjin 黃鉉辰", birthday: "2000.03.20", slug: "jiniret", color: "#EDE1F6" },
-      { id: "han", name: "HAN QUOKKA", member: "HAN 韓知城", birthday: "2000.09.14", slug: "han", color: "#F9E6BF" },
-      { id: "bbokari", name: "BbokAri", member: "Felix 李龍馥", birthday: "2000.09.15", slug: "bbokari", color: "#F9E1BA" },
-      { id: "puppym", name: "PuppyM", member: "Seungmin 金昇玟", birthday: "2000.09.22", slug: "puppym", color: "#DFEFE2" },
-      { id: "foxy-ny", name: "FoxI.Ny", member: "I.N 梁精寅", birthday: "2001.02.08", slug: "foxy-ny", color: "#F9E8D3" }
+      {
+        id: "wolfchan",
+        name: "Wolf Chan",
+        member: "Bang Chan 方燦",
+        birthday: "1997.10.03",
+        slug: "wolfchan",
+        color: "#E8DEEF"
+      },
+      {
+        id: "leebit",
+        name: "Leebit",
+        member: "Lee Know 李旻浩",
+        birthday: "1998.10.25",
+        slug: "leebit",
+        color: "#E2EAF4"
+      },
+      {
+        id: "dwaekki",
+        name: "Dwaekki",
+        member: "Changbin 徐彰彬",
+        birthday: "1999.08.11",
+        slug: "dwaekki",
+        color: "#F8DAE1"
+      },
+      {
+        id: "jiniret",
+        name: "Jiniret",
+        member: "Hyunjin 黃鉉辰",
+        birthday: "2000.03.20",
+        slug: "jiniret",
+        color: "#EDE1F6"
+      },
+      {
+        id: "han",
+        name: "HAN QUOKKA",
+        member: "HAN 韓知城",
+        birthday: "2000.09.14",
+        slug: "han",
+        color: "#F9E6BF"
+      },
+      {
+        id: "bbokari",
+        name: "BbokAri",
+        member: "Felix 李龍馥",
+        birthday: "2000.09.15",
+        slug: "bbokari",
+        color: "#F9E1BA"
+      },
+      {
+        id: "puppym",
+        name: "PuppyM",
+        member: "Seungmin 金昇玟",
+        birthday: "2000.09.22",
+        slug: "puppym",
+        color: "#DFEFE2"
+      },
+      {
+        id: "foxy-ny",
+        name: "FoxI.Ny",
+        member: "I.N 梁精寅",
+        birthday: "2001.02.08",
+        slug: "foxy-ny",
+        color: "#F9E8D3"
+      }
     ];
 
-    // 五類商品擁有獨立的類別、材質、尺寸與特色；內容依站長提供資料顯示。
+    // ===================================
+    // 2. 五種商品的獨立規格
+    // 每位角色均套用這五種款式
+    // ===================================
+
     const PRODUCT_TYPES = [
       {
-        number: 1, title: "漢堡造型吊飾",
+        number: 1,
+        title: "漢堡造型吊飾",
         category: "立體漢堡造型包包掛飾",
         material: "短絨毛、PP棉、金屬彈簧扣",
         size: "約 12 × 12 × 10 cm",
         feature: "大頭漢堡夾心造型，附金屬掛鉤。"
       },
       {
-        number: 2, title: "斗篷造型吊飾",
+        number: 2,
+        title: "斗篷造型吊飾",
         category: "連帽斗篷大頭娃娃金屬環扣吊飾",
         material: "長毛絨、PU皮革印花帶、金屬圓環",
         size: "約 10 × 14 cm (含掛繩總長約 22 cm)",
         feature: "配戴動物連帽斗篷與蝴蝶結，附專屬 Logo 皮革掛繩。"
       },
       {
-        number: 3, title: "睡衣造型手偶",
+        number: 3,
+        title: "睡衣造型手偶",
         category: "可穿脫睡衣互動手偶 (Hand Puppet)",
         material: "親膚棉質襯衫布、柔軟絨毛",
         size: "約 18 × 24 cm",
         feature: "身穿條紋襯衫，下方開口可供手部伸入演繹。"
       },
       {
-        number: 4, title: "站立磁吸玩偶",
+        number: 4,
+        title: "站立磁吸玩偶",
         category: "腳底磁吸擺飾絨毛玩偶",
         material: "極細絨毛、內建磁鐵、塑膠底座",
         size: "約 8 × 15 cm",
         feature: "腳底內建隱藏式磁鐵，可穩固站立於專屬圓盤底座。"
       },
       {
-        number: 5, title: "經典短袖玩偶",
+        number: 5,
+        title: "經典短袖玩偶",
         category: "經典官方黑 T 恤造型絨毛玩偶",
         material: "聚酯纖維、印花棉質短 T",
         size: "約 13 × 21 cm",
@@ -400,299 +1239,771 @@
       }
     ];
 
-    // 產生 8 × 5 = 40 款，所有路徑固定為 assets/slug_keyringN.png.png。
-    // 收藏 ID 沿用舊版：例如 wolfchan-keyring-1，避免原有收藏資料失效。
-    const PRODUCTS = CHARACTERS.flatMap(character => PRODUCT_TYPES.map(type => ({
-      id: `${character.id}-keyring-${type.number}`,
-      characterId: character.id,
-      number: type.number,
-      name: `${character.name} ${type.title}`,
-      image: `assets/${character.slug}_keyring${type.number}.png.png`,
-      category: type.category,
-      material: type.material,
-      size: type.size,
-      feature: type.feature
-    })));
-    const PRODUCT_BY_ID = new Map(PRODUCTS.map(product => [product.id, product]));
+    // ===================================
+    // 3. 建立全部 40 款商品
+    // 圖片路徑必須保留 .png.png
+    // ===================================
+
+    const PRODUCTS = CHARACTERS.flatMap(character =>
+      PRODUCT_TYPES.map(type => ({
+        id: `${character.id}-keyring-${type.number}`,
+        characterId: character.id,
+        number: type.number,
+        name: `${character.name} ${type.title}`,
+        image: `assets/${character.slug}_keyring${type.number}.png.png`,
+        category: type.category,
+        material: type.material,
+        size: type.size,
+        feature: type.feature
+      }))
+    );
+
+    const PRODUCT_BY_ID = new Map(
+      PRODUCTS.map(product => [product.id, product])
+    );
+
     const STORAGE_KEY = "skzoo-collection-favorites-v1";
+
     const $ = id => document.getElementById(id);
-    const state = { view: "all", character: "all", favorites: new Set(), modalId: null, focusBeforeModal: null };
-    const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const state = {
+      view: "all",
+      character: "all",
+      favorites: new Set(),
+      modalId: null,
+      focusBeforeModal: null
+    };
+
+    const prefersReducedMotion = () =>
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // ===================================
+    // 4. 共用元素建立函式
+    // ===================================
 
     function element(tag, className, content) {
       const node = document.createElement(tag);
-      if (className) node.className = className;
-      if (content !== undefined) node.textContent = content;
+
+      if (className) {
+        node.className = className;
+      }
+
+      if (content !== undefined) {
+        node.textContent = content;
+      }
+
       return node;
     }
 
+    // ===================================
+    // 5. 收藏資料讀取與儲存
+    // ===================================
+
     function loadFavorites() {
       try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-        return new Set(Array.isArray(saved) ? saved.filter(id => PRODUCT_BY_ID.has(id)) : []);
-      } catch { return new Set(); }
+        const saved = JSON.parse(
+          localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
+        return new Set(
+          Array.isArray(saved)
+            ? saved.filter(id => PRODUCT_BY_ID.has(id))
+            : []
+        );
+      } catch {
+        return new Set();
+      }
     }
+
     function saveFavorites() {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...state.favorites])); return true; }
-      catch { return false; }
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify([...state.favorites])
+        );
+        return true;
+      } catch {
+        return false;
+      }
     }
+
+    // ===================================
+    // 6. 提示訊息
+    // ===================================
+
     let toastTimer;
+
     function toast(message) {
       $("toast").textContent = message;
       $("toast").classList.add("visible");
+
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => $("toast").classList.remove("visible"), 2200);
+
+      toastTimer = setTimeout(() => {
+        $("toast").classList.remove("visible");
+      }, 2200);
     }
+
+    // ===================================
+    // 7. 圖片載入與錯誤處理
+    // ===================================
 
     function imageWithFallback(src, alt, eager = false) {
       const img = document.createElement("img");
+
       img.src = src;
       img.alt = alt;
       img.loading = eager ? "eager" : "lazy";
       img.decoding = "async";
+
       img.addEventListener("error", () => {
-        const fallback = element("span", "image-error", `圖片無法載入：${src}`);
+        const fallback = element(
+          "span",
+          "image-error",
+          `圖片無法載入：${src}`
+        );
+
         img.replaceWith(fallback);
       }, { once: true });
+
       return img;
     }
 
+    // ===================================
+    // 8. 首頁手帳圖片
+    // ===================================
+
     function renderScrapbook() {
-      const chosen = [PRODUCTS[0], PRODUCTS[25], PRODUCTS[39]];
+      const chosen = [
+        PRODUCTS[0],
+        PRODUCTS[25],
+        PRODUCTS[39]
+      ];
+
       for (const item of chosen) {
         const card = element("div", "snapshot");
         const picture = element("div", "snapshot-image");
-        picture.append(imageWithFallback(item.image, item.name, true));
-        const who = CHARACTERS.find(c => c.id === item.characterId);
-        card.append(picture, element("div", "snapshot-caption", who.name));
+
+        picture.append(
+          imageWithFallback(item.image, item.name, true)
+        );
+
+        const who = CHARACTERS.find(
+          c => c.id === item.characterId
+        );
+
+        card.append(
+          picture,
+          element("div", "snapshot-caption", who.name)
+        );
+
         $("scrapbook").prepend(card);
       }
     }
 
+    // ===================================
+    // 9. 角色快速導覽
+    // ===================================
+
     function renderCharacterNavigation() {
       const nav = $("character-nav");
       nav.replaceChildren();
-      const items = [{ id: "all", name: "全部角色" }, ...CHARACTERS];
+
+      const items = [
+        { id: "all", name: "全部角色" },
+        ...CHARACTERS
+      ];
+
       for (const item of items) {
         const button = element("button", "chip", item.name);
+
         button.type = "button";
-        button.setAttribute("aria-pressed", String(state.character === item.id));
+
+        button.setAttribute(
+          "aria-pressed",
+          String(state.character === item.id)
+        );
+
         button.addEventListener("click", () => {
           state.character = item.id;
+
           renderCharacterNavigation();
           renderGallery();
-          const target = item.id === "all" ? $("collection") : $(`character-${item.id}`);
-          (target || $("collection")).scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+
+          const target = item.id === "all"
+            ? $("collection")
+            : $(`character-${item.id}`);
+
+          (target || $("collection")).scrollIntoView({
+            behavior: prefersReducedMotion() ? "auto" : "smooth"
+          });
         });
+
         nav.append(button);
       }
     }
 
+    // ===================================
+    // 10. 愛心收藏按鈕
+    // ===================================
+
     function createFavoriteButton(product) {
       const button = element("button", "favorite-heart");
+
       button.type = "button";
       button.dataset.favoriteId = product.id;
-      button.addEventListener("click", () => toggleFavorite(product.id));
+
+      button.addEventListener("click", () => {
+        toggleFavorite(product.id);
+      });
+
       return button;
     }
 
+    // ===================================
+    // 11. 商品卡片
+    // 重要：改用 card-img-container
+    // ===================================
+
     function createProductCard(product) {
       const card = element("article", "product-card");
+
       const open = element("button", "product-open");
       open.type = "button";
-      open.setAttribute("aria-label", `查看 ${product.name} 詳細規格`);
-      const imageBox = element("div", "product-visual");
-      imageBox.append(imageWithFallback(product.image, product.name));
-      open.append(imageBox, element("div", "product-name", product.name));
-      open.addEventListener("click", () => openModal(product.id, open));
-      card.append(open, createFavoriteButton(product));
+
+      open.setAttribute(
+        "aria-label",
+        `查看 ${product.name} 詳細規格`
+      );
+
+      // 統一商品圖片容器
+      const imageBox = element("div", "card-img-container");
+
+      imageBox.append(
+        imageWithFallback(product.image, product.name)
+      );
+
+      open.append(
+        imageBox,
+        element("div", "product-name", product.name)
+      );
+
+      open.addEventListener("click", () => {
+        openModal(product.id, open);
+      });
+
+      card.append(
+        open,
+        createFavoriteButton(product)
+      );
+
       return card;
     }
 
+    // ===================================
+    // 12. 角色區塊
+    // ===================================
+
     function createCharacterSection(character, products, index) {
       const section = element("section", "character");
+
       section.id = `character-${character.id}`;
-      section.style.setProperty("--accent", character.color);
-      const header = element("div", "character-header");
-      const badge = element("div", "character-index", String(index + 1).padStart(2, "0"));
-      const info = document.createElement("div");
-      info.append(
-        element("div", "overline", `SKZOO CHARACTER · ${products.length} ITEMS`),
-        element("h3", "character-name", character.name),
-        element("p", "member-line", `${character.member}｜生日 ${character.birthday}`),
-        element("p", "character-summary", `歡迎來到 ${character.name} 的收藏小角落 ♡`)
+
+      section.style.setProperty(
+        "--accent",
+        character.color
       );
+
+      const header = element("div", "character-header");
+
+      const badge = element(
+        "div",
+        "character-index",
+        String(index + 1).padStart(2, "0")
+      );
+
+      const info = document.createElement("div");
+
+      info.append(
+        element(
+          "div",
+          "overline",
+          `SKZOO CHARACTER · ${products.length} ITEMS`
+        ),
+        element(
+          "h3",
+          "character-name",
+          character.name
+        ),
+        element(
+          "p",
+          "member-line",
+          `${character.member}｜生日 ${character.birthday}`
+        ),
+        element(
+          "p",
+          "character-summary",
+          `歡迎來到 ${character.name} 的收藏小角落 ♡`
+        )
+      );
+
       const details = document.createElement("details");
+
       details.append(
         element("summary", "", "展開角色資訊 ＋"),
-        element("p", "details-body", `${character.name} 對應成員：${character.member}；出生日期：${character.birthday}。本區展示五種週邊：漢堡吊飾、斗篷吊飾、睡衣手偶、磁吸玩偶與短袖玩偶。`)
+        element(
+          "p",
+          "details-body",
+          `${character.name} 對應成員：${character.member}；出生日期：${character.birthday}。本區展示五種週邊：漢堡吊飾、斗篷吊飾、睡衣手偶、磁吸玩偶與短袖玩偶。`
+        )
       );
+
       info.append(details);
       header.append(badge, info);
+
       const grid = element("div", "product-grid");
-      products.forEach(product => grid.append(createProductCard(product)));
+
+      products.forEach(product => {
+        grid.append(createProductCard(product));
+      });
+
       section.append(header, grid);
+
       return section;
     }
+
+    // ===================================
+    // 13. 渲染所有商品
+    // ===================================
 
     function renderGallery() {
       const gallery = $("gallery");
       gallery.replaceChildren();
+
       let count = 0;
+
       CHARACTERS.forEach((character, index) => {
-        if (state.character !== "all" && character.id !== state.character) return;
+        if (
+          state.character !== "all" &&
+          character.id !== state.character
+        ) {
+          return;
+        }
+
         const matching = PRODUCTS.filter(product =>
           product.characterId === character.id &&
-          (state.view === "all" || state.favorites.has(product.id))
+          (
+            state.view === "all" ||
+            state.favorites.has(product.id)
+          )
         );
+
         if (!matching.length) return;
+
         count += matching.length;
-        gallery.append(createCharacterSection(character, matching, index));
+
+        gallery.append(
+          createCharacterSection(character, matching, index)
+        );
       });
+
+      // 收藏清單為空時
       if (count === 0) {
         const empty = element("div", "empty");
+
         empty.append(
           element("div", "empty-icon", "♡"),
           element("h3", "", "這個角落還沒有收藏"),
-          element("p", "", "點選商品卡片上的愛心，就能把喜歡的週邊收進收藏清單。")
+          element(
+            "p",
+            "",
+            "點選商品卡片上的愛心，就能把喜歡的週邊收進收藏清單。"
+          )
         );
-        const browse = element("button", "button primary", "查看全部週邊");
+
+        const browse = element(
+          "button",
+          "button primary",
+          "查看全部週邊"
+        );
+
         browse.type = "button";
-        browse.addEventListener("click", () => changeView("all"));
+
+        browse.addEventListener("click", () => {
+          changeView("all");
+        });
+
         empty.append(browse);
         gallery.append(empty);
       }
-      $("collection-title").textContent = state.view === "favorites" ? "我的小小收藏" : "角色與週邊小日記";
-      $("collection-subtitle").textContent = state.view === "favorites" ? "每一份心動，都值得好好珍藏 ♡" : "依成員年齡由大至小排列，慢慢逛每個角色的可愛角落。";
-      const filterLabel = state.character === "all" ? "全部角色" : CHARACTERS.find(c => c.id === state.character).name;
-      $("result-count").textContent = `目前顯示 ${count} 件${state.view === "favorites" ? "收藏" : "週邊"}・${filterLabel}`;
-      $("view-all").setAttribute("aria-pressed", String(state.view === "all"));
-      $("view-favorites").setAttribute("aria-pressed", String(state.view === "favorites"));
+
+      $("collection-title").textContent =
+        state.view === "favorites"
+          ? "我的小小收藏"
+          : "角色與週邊小日記";
+
+      $("collection-subtitle").textContent =
+        state.view === "favorites"
+          ? "每一份心動，都值得好好珍藏 ♡"
+          : "依成員年齡由大至小排列，慢慢逛每個角色的可愛角落。";
+
+      const filterLabel = state.character === "all"
+        ? "全部角色"
+        : CHARACTERS.find(
+            c => c.id === state.character
+          ).name;
+
+      $("result-count").textContent =
+        `目前顯示 ${count} 件` +
+        `${state.view === "favorites" ? "收藏" : "週邊"}` +
+        `・${filterLabel}`;
+
+      $("view-all").setAttribute(
+        "aria-pressed",
+        String(state.view === "all")
+      );
+
+      $("view-favorites").setAttribute(
+        "aria-pressed",
+        String(state.view === "favorites")
+      );
+
       refreshFavoriteButtons();
     }
 
+    // ===================================
+    // 14. 更新收藏狀態
+    // ===================================
+
     function refreshFavoriteButtons() {
-      $("header-count").textContent = String(state.favorites.size);
-      $("favorite-label").textContent = `(${state.favorites.size})`;
-      document.querySelectorAll("[data-favorite-id]").forEach(button => {
-        const id = button.dataset.favoriteId;
-        const selected = state.favorites.has(id);
-        button.textContent = selected ? "♥" : "♡";
-        button.setAttribute("aria-pressed", String(selected));
-        button.setAttribute("aria-label", `${selected ? "移除收藏" : "加入收藏"}：${PRODUCT_BY_ID.get(id).name}`);
-      });
+      $("header-count").textContent =
+        String(state.favorites.size);
+
+      $("favorite-label").textContent =
+        `(${state.favorites.size})`;
+
+      document
+        .querySelectorAll("[data-favorite-id]")
+        .forEach(button => {
+          const id = button.dataset.favoriteId;
+          const selected = state.favorites.has(id);
+
+          button.textContent = selected ? "♥" : "♡";
+
+          button.setAttribute(
+            "aria-pressed",
+            String(selected)
+          );
+
+          button.setAttribute(
+            "aria-label",
+            `${selected ? "移除收藏" : "加入收藏"}：${PRODUCT_BY_ID.get(id).name}`
+          );
+        });
+
       if (state.modalId) {
-        const isFavorite = state.favorites.has(state.modalId);
-        $("modal-favorite").textContent = isFavorite ? "♥ 已收藏（點擊移除）" : "♡ 加入收藏";
-        $("modal-favorite").setAttribute("aria-pressed", String(isFavorite));
+        const isFavorite = state.favorites.has(
+          state.modalId
+        );
+
+        $("modal-favorite").textContent = isFavorite
+          ? "♥ 已收藏（點擊移除）"
+          : "♡ 加入收藏";
+
+        $("modal-favorite").setAttribute(
+          "aria-pressed",
+          String(isFavorite)
+        );
       }
     }
 
+    // ===================================
+    // 15. 加入或移除收藏
+    // ===================================
+
     function toggleFavorite(id) {
       const wasSaved = state.favorites.has(id);
-      if (wasSaved) state.favorites.delete(id);
-      else state.favorites.add(id);
+
+      if (wasSaved) {
+        state.favorites.delete(id);
+      } else {
+        state.favorites.add(id);
+      }
+
       const persisted = saveFavorites();
-      // 收藏視圖在彈窗關閉時更新，以免關閉後焦點跳動。
-      if (state.view === "favorites" && !$("product-dialog").open) renderGallery();
+
+      if (
+        state.view === "favorites" &&
+        !$("product-dialog").open
+      ) {
+        renderGallery();
+      }
+
       refreshFavoriteButtons();
-      toast(persisted ? (wasSaved ? "已從收藏移除 ♡" : "已加入收藏 ♥") : "收藏已更新，但此瀏覽器無法保存資料");
+
+      toast(
+        persisted
+          ? (
+              wasSaved
+                ? "已從收藏移除 ♡"
+                : "已加入收藏 ♥"
+            )
+          : "收藏已更新，但此瀏覽器無法保存資料"
+      );
     }
 
+    // ===================================
+    // 16. 填入商品彈窗資料
+    // ===================================
+
     function fillModal(product) {
-      const character = CHARACTERS.find(c => c.id === product.characterId);
+      const character = CHARACTERS.find(
+        c => c.id === product.characterId
+      );
+
       state.modalId = product.id;
-      $("modal-character").textContent = `${character.name} · ITEM ${product.number}/5`;
+
+      $("modal-character").textContent =
+        `${character.name} · ITEM ${product.number}/5`;
+
       $("modal-title").textContent = product.name;
+
       const picture = $("modal-visual");
-      picture.replaceChildren(imageWithFallback(product.image, product.name, true));
+      picture.replaceChildren(
+        imageWithFallback(product.image, product.name, true)
+      );
+
       const specs = $("modal-specs");
       specs.replaceChildren();
+
       const fields = [
         ["類別", product.category],
         ["材質", product.material],
         ["尺寸", product.size],
         ["特色", product.feature]
       ];
+
       for (const [label, value] of fields) {
         const row = element("div", "spec-row");
-        row.append(element("dt", "", label), element("dd", "", value));
+
+        row.append(
+          element("dt", "", label),
+          element("dd", "", value)
+        );
+
         specs.append(row);
       }
-      $("modal-previous").disabled = product.number === 1;
-      $("modal-next").disabled = product.number === 5;
+
+      $("modal-previous").disabled =
+        product.number === 1;
+
+      $("modal-next").disabled =
+        product.number === 5;
+
       refreshFavoriteButtons();
     }
 
+    // ===================================
+    // 17. 開啟與關閉彈窗
+    // ===================================
+
     function openModal(id, trigger) {
       state.focusBeforeModal = trigger;
+
       fillModal(PRODUCT_BY_ID.get(id));
+
       $("product-dialog").showModal();
+
       document.body.classList.add("dialog-open");
+
       $("modal-close").focus();
     }
 
     function closeModal() {
-      if ($("product-dialog").open) $("product-dialog").close();
+      if ($("product-dialog").open) {
+        $("product-dialog").close();
+      }
     }
 
+    // ===================================
+    // 18. 上一款 / 下一款
+    // ===================================
+
     function moveModal(direction) {
-      const current = PRODUCT_BY_ID.get(state.modalId);
+      const current = PRODUCT_BY_ID.get(
+        state.modalId
+      );
+
       if (!current) return;
-      const target = PRODUCT_BY_ID.get(`${current.characterId}-keyring-${current.number + direction}`);
-      if (target) fillModal(target);
+
+      const target = PRODUCT_BY_ID.get(
+        `${current.characterId}-keyring-${current.number + direction}`
+      );
+
+      if (target) {
+        fillModal(target);
+      }
     }
+
+    // ===================================
+    // 19. 彈窗事件
+    // ===================================
 
     $("product-dialog").addEventListener("close", () => {
       document.body.classList.remove("dialog-open");
       state.modalId = null;
-      if (state.view === "favorites") renderGallery();
+
+      if (state.view === "favorites") {
+        renderGallery();
+      }
+
       const previous = state.focusBeforeModal;
-      if (previous?.isConnected) previous.focus({ preventScroll: true });
-      else $("view-favorites").focus({ preventScroll: true });
+
+      if (previous?.isConnected) {
+        previous.focus({ preventScroll: true });
+      } else {
+        $("view-favorites").focus({
+          preventScroll: true
+        });
+      }
+
       state.focusBeforeModal = null;
     });
-    $("product-dialog").addEventListener("click", event => {
-      if (event.target === $("product-dialog")) closeModal();
-    });
-    $("modal-close").addEventListener("click", closeModal);
-    $("modal-done").addEventListener("click", closeModal);
-    $("modal-previous").addEventListener("click", () => moveModal(-1));
-    $("modal-next").addEventListener("click", () => moveModal(1));
-    $("modal-favorite").addEventListener("click", () => {
-      if (state.modalId) toggleFavorite(state.modalId);
-    });
+
+    $("product-dialog").addEventListener(
+      "click",
+      event => {
+        if (event.target === $("product-dialog")) {
+          closeModal();
+        }
+      }
+    );
+
+    $("modal-close").addEventListener(
+      "click",
+      closeModal
+    );
+
+    $("modal-done").addEventListener(
+      "click",
+      closeModal
+    );
+
+    $("modal-previous").addEventListener(
+      "click",
+      () => moveModal(-1)
+    );
+
+    $("modal-next").addEventListener(
+      "click",
+      () => moveModal(1)
+    );
+
+    $("modal-favorite").addEventListener(
+      "click",
+      () => {
+        if (state.modalId) {
+          toggleFavorite(state.modalId);
+        }
+      }
+    );
+
+    // ===================================
+    // 20. 全部商品與收藏清單切換
+    // ===================================
 
     function changeView(view) {
       state.view = view;
       state.character = "all";
+
       renderCharacterNavigation();
       renderGallery();
-      $("collection").scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+
+      $("collection").scrollIntoView({
+        behavior: prefersReducedMotion()
+          ? "auto"
+          : "smooth"
+      });
     }
+
+    // ===================================
+    // 21. 返回首頁
+    // 不清除收藏紀錄
+    // ===================================
 
     function goHome() {
       closeModal();
+
       state.view = "all";
       state.character = "all";
+
       renderCharacterNavigation();
       renderGallery();
-      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion()
+          ? "auto"
+          : "smooth"
+      });
     }
 
-    $("view-all").addEventListener("click", () => changeView("all"));
-    $("view-favorites").addEventListener("click", () => changeView("favorites"));
-    $("header-favorites").addEventListener("click", () => changeView("favorites"));
-    $("hero-favorites").addEventListener("click", () => changeView("favorites"));
-    $("logo-home").addEventListener("click", event => { event.preventDefault(); goHome(); });
-    $("back-top").addEventListener("click", goHome);
-    window.addEventListener("scroll", () => { $("back-top").hidden = window.scrollY <= 390; }, { passive: true });
+    // ===================================
+    // 22. 頁面按鈕事件
+    // ===================================
 
-    // 初始化：不需要外部 JS 或任何第三方套件。
+    $("view-all").addEventListener(
+      "click",
+      () => changeView("all")
+    );
+
+    $("view-favorites").addEventListener(
+      "click",
+      () => changeView("favorites")
+    );
+
+    $("header-favorites").addEventListener(
+      "click",
+      () => changeView("favorites")
+    );
+
+    $("hero-favorites").addEventListener(
+      "click",
+      () => changeView("favorites")
+    );
+
+    $("logo-home").addEventListener(
+      "click",
+      event => {
+        event.preventDefault();
+        goHome();
+      }
+    );
+
+    $("back-top").addEventListener(
+      "click",
+      goHome
+    );
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        $("back-top").hidden = window.scrollY <= 390;
+      },
+      { passive: true }
+    );
+
+    // ===================================
+    // 23. 初始化
+    // ===================================
+
     state.favorites = loadFavorites();
+
     renderScrapbook();
     renderCharacterNavigation();
     renderGallery();
+
   </script>
+
 </body>
 </html>
